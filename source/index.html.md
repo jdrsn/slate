@@ -2,10 +2,9 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
   - javascript
+  - typescript
+  - shell
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
@@ -23,62 +22,94 @@ code_clipboard: true
 
 Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+We have language bindings in Shell, JavaScript and TypeScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
 This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
-# Authentication
+# Quick-Start
 
-> To authorize, use this code:
+The API can be used in any programming language via HTTP. However, there is a client library for NodeJS.  
 
-```ruby
-require 'kittn'
+## Installation
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+You can install qido's client via npm:
+
+`npm i @qido/client`
+
+## Import
+
+The client can be imported on JavaScript or TypeScript code.
+
+```javascript
+const client = require('@qido/client')
 ```
 
-```python
-import kittn
+```typescript
+import * as client from '@qido/client'
+```
 
-api = kittn.authorize('meowmeowmeow')
+## Initialization
+
+Make sure to replace `app` with your app name.
+
+```javascript
+const qido = new client('app')
+```
+
+```typescript
+const qido = new client('app')
+```
+
+# Authentication
+
+If your app has authentication on, every request must be authorized through a token. Everytime a user logs in, a `token` is generated. A user can be logged in via HTTP under `https://qi.do/a` or through the libraries.
+
+```javascript
+qido.auth('u@u.uu', 'uuuuuu').then(data => console.log(data))
+```
+
+```typescript
+qido.auth('u@u.uu', 'uuuuuu').then(data => console.log(data))
 ```
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here" \
-  -H "Authorization: meowmeowmeow"
+curl "https://qi.do/a/app/u@u.uu/uuuuuu"
 ```
 
-```javascript
-const kittn = require('kittn');
+## HTTP Request
 
-let api = kittn.authorize('meowmeowmeow');
+`GET https://qi.do/a/app/user/pass`
+
+`GET https://qi.do/a/app/user/pass/7d`
+
+```json
+{
+  "success": "user authenticated",
+  "data": {
+    "u": "u@u.uu",
+    "uid": "5feb740358daeb0b0b23edba",
+    "token": "eyJhbGciOiJIUzI1NiIs..."
+  }
+}
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+## URL Parameters
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+You must replace `app`, `user` and `pass` with your respective data directly in the request URL.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
+Parameter | Required | Description
+--------- | ----------- |  -----------
+app | true | The name of the app to be used.
+user | true | The user (email address) to log in.
+pass | true | The password of the user.
+expires | false | The time that the token should be valid in the form `30s`, `2h`, `7d`. Default value is `1h`.
 
 # Kittens
 
 ## Get All Kittens
 
-```ruby
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
+```typescript
 import kittn
 
 api = kittn.authorize('meowmeowmeow')
@@ -137,14 +168,7 @@ Remember — a happy kitten is an authenticated kitten!
 
 ## Get a Specific Kitten
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
+```typescript
 import kittn
 
 api = kittn.authorize('meowmeowmeow')
@@ -191,14 +215,7 @@ ID | The ID of the kitten to retrieve
 
 ## Delete a Specific Kitten
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
+```typescript
 import kittn
 
 api = kittn.authorize('meowmeowmeow')
