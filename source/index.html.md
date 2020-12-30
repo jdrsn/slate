@@ -111,6 +111,14 @@ user | The user (email address) to log in. | true
 pass | The password of the user. | true
 expires | The time period until which the token should be valid, in the form `30s`, `2h`, `7d`. Default value is `1h`. | false
 
+
+
+
+
+
+
+
+
 # Objects
 
 ## Create An Object
@@ -320,6 +328,14 @@ Parameter | Description | Required
 app | The name of the app to be used. | true
 array | The name of the array to be used. | true
 
+
+
+
+
+
+
+
+
 ## Update An Object
 
 ```javascript
@@ -346,8 +362,8 @@ app.update('array/objectId', props, token)
 
 ```shell
 curl https://qi.do/u/app/array/objecId \
---data '{"random":456,"otherStuff":[true,false]}' \
 --request PUT \
+--data '{"random":456,"otherStuff":[true,false]}' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -388,6 +404,15 @@ Parameter | Description | Required
 --------- | ----------- |  -----------
 x | The properties to update/add as JSON string. | true
 
+
+
+
+
+
+
+
+
+
 ## Delete An Object
 
 ```javascript
@@ -426,11 +451,24 @@ Using both methods, it is just necessary to append the object id in the URL, suc
 
 `GET https://qi.do/d/app/array/objectId`
 
+
+
+
+
+
 # Users
 
 A user object is just like any other object.
 Only the properties `u` (email) and `p` (password) are required.
 A custom user id can be set directly in the request body as `_id`.
+
+
+
+
+
+
+
+
 
 ## Create A User
 
@@ -502,6 +540,11 @@ Parameter | Description | Required
 --------- | ----------- |  -----------
 x | The user to create as JSON string. | true
 
+
+
+
+
+
 ## Read A User
 
 ```javascript
@@ -533,12 +576,12 @@ curl https://qi.do/r/app/u/objectId \
 }
 ```
 
-A single user can be retrieved by attaching its `id` to the request URL in the form `qi.do/r/app/array/userId`.
+A single user can be retrieved by attaching its `id` to the request URL in the form `qi.do/r/app/u/userId`.
 It is also possible to execute filter queries to return specific users.
 
 ### HTTP Request
 
-`GET https://qi.do/r/app/array/userId`
+`GET https://qi.do/r/app/u/userId`
 
 ### URL Parameters
 
@@ -581,8 +624,8 @@ app.update('u', props, token)
 
 ```shell
 curl https://qi.do/u/app/u \
---data '{"disabled":false,"p":"n3wP455w0rd"}' \
 --request PUT \
+--data '{"disabled":false,"p":"n3wP455w0rd"}' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -613,7 +656,7 @@ In the request URL, you must replace `app` with your respective data.
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
-u | TThe user array. | true
+u | The user array. | true
 
 ### Query Parameters (`GET` Only)
 
@@ -631,19 +674,233 @@ x | The properties to update/add as JSON string. | true
 ## Delete A User
 
 ```javascript
-// delete object by its id
-app.delete('array/objectId', token)
+// delete user via token
+app.delete('u/u@u.uu/uuuuuu', token)
   .then(data => console.log(data))
 ```
 
 ```typescript
-// delete object by its id
-app.delete('array/objectId', token)
+// delete user via token
+app.delete('u/u@u.uu/uuuuuu', token)
   .then(data => console.log(data))
 ```
 
 ```shell
-curl https://qi.do/d/app/array/objecId \
+curl https://qi.do/d/app/u \
+--request DELETE \
+--data '{"u":"u@u.uu","p":"uuuuuu"}' \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP Response:
+
+```json
+{
+  "success": "object deleted"
+}
+```
+The operation `/d/app/u` allows a user to delete its own user account.
+A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
+Using both methods, it is just necessary to append email and password in the URL, such as `qi.do/d/app/u/email/password`.
+
+A user can only be deleted if email and password are sent with the request.
+Only the user from the current authorization token can be updated/deleted.
+
+### HTTP Request
+
+`DELETE https://qi.do/d/app/u`
+
+`GET https://qi.do/d/app/u/test@qi.do/p455w0rd`
+
+
+
+
+
+# Files
+
+A file object is also just like any other object.
+For every file in the request, an object in the `f` array is created.
+The data of the uploaded files are also stored in the newly created object of the requested array.
+That means it is possible to upload files onto no mather what array.
+
+
+
+
+
+
+
+
+
+
+
+## Create A File
+
+```javascript
+// the object with files to be uploaded
+const object = {
+  otherStuff: "everything is possible",
+  files: [],
+  path: "custom/path"
+}
+// create a file on qi.do
+app.create('array', object, token)
+  .then(data => console.log(data))
+```
+
+```typescript
+// the object with files to be uploaded
+const object = {
+  otherStuff: "everything is possible",
+  files: [],
+  path: "custom/path"
+}
+// create a file on qi.do
+app.create('array', object, token)
+  .then(data => console.log(data))
+```
+
+```shell
+curl https://qi.do/c/app/array \
+-d '{"files":[],"path":"custom/path"}' \
+-H 'Content-Type: application/json'
+```
+
+> HTTP Response:
+
+```json
+{
+  "success": "object created",
+  "data": {
+    "_id": "5fbf9947f54f0cdad0cf1386",
+    "otherStuff": "everything is possible",
+    "files": [
+      {
+        "_id": "5fbf9947f54f0cdad0cf1387",
+        "field": "fotos",
+        "array": "array",
+        "path": "custom/path",
+        "name": "fileName.png",
+        "url": "https://f.qi.do...",
+        "uid": "5fbe9efd8370f4c15f6e91d6"
+      },
+      {
+        "_id": "5fbf9947f54f0cdad0cf1388",
+        "field": "fotos",
+        "array": "array",
+        "path": "custom/path/file.pdf",
+        "name": "file.pdf",
+        "url": "https://f.qi.do...",
+        "uid": "5fbe9efd8370f4c15f6e91d6"
+      }
+    ],
+    "uid": "5fbe9efd8370f4c15f6e91d6"
+  }
+}
+```
+
+The operation `/c` allows you to upload files onto the requested app.
+A request can be sent through the HTTP methods `POST` and `PUT` (with operation `/u`).
+All files in the same request are upload to the specified `path` in the request body.
+If a request does not contain `path`, then all files are uploaded to a new automatically created user directory.
+
+### HTTP Request
+
+`POST https://qi.do/c/app/array`
+
+`PUT https://qi.do/u/app/array`
+
+### URL Parameters
+
+In the request URL, you must replace `app` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+array | The name of the array to be used. | true
+
+
+
+
+
+
+## Read Files
+
+```javascript
+// read file with id fileId
+app.read('f/fileId', token)
+  .then(data => console.log(data))
+```
+
+```typescript
+// read file with id fileId
+app.read('f/fileId', token)
+  .then(data => console.log(data))
+```
+
+```shell
+curl https://qi.do/r/app/f/fileId \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP Response:
+
+```json
+{
+  "_id": "5fbf9947f54f0cdad0cf1388",
+  "field": "files",
+  "array": "array",
+  "path": "custom/path/file.pdf",
+  "name": "file.pdf",
+  "url": "https://f.qi.do...",
+  "uid": "5fbe9efd8370f4c15f6e91d6"
+}
+```
+
+The operation `/r/app/f` allows a user to read its own files.
+A request can be sent only via HTTP `GET` method.
+A single file can be retrieved by sending its ID in the request URL, such like `qi.do/r/app/f/fileId`.
+Through the URLs ending with `/f`, one can read all files or filter them as any other query.
+
+### HTTP Request
+
+`GET https://qi.do/r/app/f/fileId`
+
+`GET https://qi.do/r/app/f`
+
+`GET https://qi.do/r/app/f?x={"path":"path/to/files"}`
+
+### URL Parameters
+
+In the request URL, you must replace `app` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+f | The file array. | true
+
+
+
+
+
+
+## Delete A File
+
+```javascript
+// delete file by its id
+app.delete('f/fileId', token)
+  .then(data => console.log(data))
+```
+
+```typescript
+// delete file by its id
+app.delete('f/fileId', token)
+  .then(data => console.log(data))
+```
+
+```shell
+curl https://qi.do/d/app/f/fileId \
 --request DELETE \
 -H 'Authorization: Bearer token'
 ```
@@ -655,16 +912,16 @@ curl https://qi.do/d/app/array/objecId \
   "success": "object deleted"
 }
 ```
-
-The operation `/d` allows you to delete an object from an array.
+The operation `/d` allows a user to delete its own files.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
-Using both methods, it is just necessary to append the object id in the URL, such as `qi.do/d/app/array/objectId`.
+
 
 ### HTTP Request
 
-`DELETE https://qi.do/d/app/array/objectId`
+`DELETE https://qi.do/d/app/f/fileId`
 
-`GET https://qi.do/d/app/array/objectId`
+`GET https://qi.do/d/app/f/fileId`
+
 
 
 
