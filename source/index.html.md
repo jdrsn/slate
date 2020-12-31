@@ -479,7 +479,7 @@ const user = {
   p: "p455w0rd",
 }
 // create a user on qi.do
-app.create('u', user, token)
+app.create('u', user)
   .then(data => console.log(data))
 ```
 
@@ -490,7 +490,7 @@ const user = {
   p: "p455w0rd",
 }
 // create a user on qi.do
-app.create('u', user, token)
+app.create('u', user)
   .then(data => console.log(data))
 ```
 
