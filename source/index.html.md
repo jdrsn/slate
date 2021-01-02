@@ -96,9 +96,9 @@ If your app has authentication on, every request must be authorized through a `t
 
 ### HTTP Request
 
-`GET https://qi.do/a/app/user/pass`
+`GET https://qi.do/a/app/profile/pass`
 
-`GET https://qi.do/a/app/user/pass/7d`
+`GET https://qi.do/a/app/profile/pass/7d`
 
 ### URL Parameters
 
@@ -121,205 +121,223 @@ expires | The time period until which the token should be valid, in the form `30
 
 # Objects
 
-## Create An Object
+## Create an object
+
+The operation `/c` allows you to create an object (document/entry) inside an array (collection/table).
+A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
+
+### HTTP request
+
+`POST https://qi.do/c/app/array`
+
+Using `POST`, the data of the object to be created corresponds to the HTTP request body.
+
+> <a href='https://qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"}' target='_blank'>qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"} </a>
 
 ```javascript
-// JSON object to be created
-const object = {
-  random: 123,
-  stuff: [
-    {
-      cool: true,
-      text: "a test"
-    },
-    {
-      foo: null
-    }
-  ]
+// object to be created
+const message = {
+  user: 'dad',
+  channel: 'kids',
+  text: 'dinner is ready :)'
 }
-// create object on qi.do and log response
-app.create('array', object, token)
-  .then(data => console.log(data))
+// create object and log response
+app.create('message', message)
+  .then(res => console.log(res))
 ```
 
 ```typescript
-// JSON object to be created
-const object = {
-  random: 123,
-  stuff: [
-    {
-      cool: true,
-      text: "a test"
-    },
-    {
-      foo: null
-    }
-  ]
+// object to be created
+const message = {
+  user: 'dad',
+  channel: 'kids',
+  text: 'dinner is ready :)'
 }
-// create object on qi.do and log response
-app.create('array', object, token)
-  .then(data => console.log(data))
+// create object and log response
+app.create('message', message)
+  .then(res => console.log(res))
 ```
 
 ```shell
-curl https://qi.do/c/app/array \
--d '{"random":123,"stuff":[{"foo":true,"text":"a test"},{"foo":null}]}' \
+curl https://qi.do/c/chat/message \
+-d '{"user":"dad","channel":"kids","text":"dinner is ready :)"}' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
 
-> HTTP Response:
+> HTTP response:
 
 ```json
 {
-  "success": "object created",
-  "data": {
-    "_id": "5feca140530c0772b232d3e5",
-  }
+  "_id": "5feca140530c0772b232d3e5"
 }
 ```
 
-The operation `/c` allows you to create an object (document/entry) inside an array (collection/table).
-A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
-Using `POST`, the data of the object to be created corresponds to the request body.
-Via `GET`, the data needs to be passed as a JSON-string in the query param `x` of the URL, such like `qi.do/c/app/array?x=json_string`.
+`GET https://qi.do/c/app/array?x=json_string`
 
-### HTTP Request
+If you are using `GET`, the object to be created needs to be passed as JSON string in the URL query param named `x`.
 
-`POST https://qi.do/c/app/array`
-
-`GET https://qi.do/c/app/array?x={"random":123,"stuff":[{"foo":true,"text":"a test"},{"foo":null}]}`
-
-### URL Parameters
-
-In the request URL, you must replace `app` and `array` with your respective data.
+### URL parameters
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 array | The name of the array to be used. | true
 
-### Query Parameters (`GET` Only)
-
-If you are using `GET`, the JSON object to be created has to be passed in the query param named `x`.
+### Query parameters (`GET` Only)
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 x | The object to create as JSON string. | true
 
-## Read All Objects
+
+
+
+
+
+
+## Read objects
+
+The operation `/r` allows you to read objects (documents/entries) that are stored in a specific array (collection/table).
+A request can be sent only via HTTP method `GET`.
+
+### Read all objects
+
+`GET https://qi.do/r/app/array`
+
+Through the URLs ending with `/array`, all objects inside this array are retrieved.
+
+> <a href="https://qi.do/r/chat/message" target="_blank">qi.do/r/chat/message </a>
 
 ```javascript
-// read all objects from the array
-app.read('array', token)
+// read all objects from message array
+app.read('message')
   .then(data => console.log(data))
 ```
 
 ```typescript
-// read all objects from the array
-app.read('array', token)
+// read all objects from message array
+app.read('message')
   .then(data => console.log(data))
 ```
 
 ```shell
-curl https://qi.do/r/app/array \
+curl https://qi.do/r/chat/message \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+> HTTP response:
+
+```json
+[...] // all objects inside array
+```
+
+### Read specific objects
+
+`GET https://qi.do/r/app/array?x=json_string&o=json_string`
+
+In order to retrieve specific objects, you have to set a filter to the query param `x` in the request URL.
+One can also **sort** and **paginate** queries by sending the options via query param `o`.
+For more details about how to query objects with `qido`, please refer to the
+<a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
+documentation.
+
+> <a href='https://qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3}' target='_blank'>qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3} </a>
+
+```javascript
+// read specific objects from message array
+const filter = {channel: 'kids'}
+const options = {limit: 3}
+app.read('message', filter, options)
+  .then(data => console.log(data))
+```
+
+```typescript
+// read specific objects from message array
+const filter = {channel: 'kids'}
+const options = {limit: 3}
+app.read('message', filter, options)
+  .then(data => console.log(data))
+```
+
+```shell
+curl https://qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3} \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
 
-> HTTP Response:
+> HTTP response:
 
 ```json
 [
   {
-    "_id": "8e0EWCO9nCWOtF54YmKF",
-    "uid": "8n3IXnCkEfP6...",
-    "random": 123,
-    "stuff": [
-      {
-        "foo": true,
-        "text": "a test :)"
-      },
-      {
-        "foo": null
-      }
-    ],
-    "_p": 0
+    "_id": "5feca140530c0772b232d3e5",
+    "user": "dad",
+    "channel": "kids",
+    "text": "dinner is ready :)"
   },
   {
-    "_id": "YROrVTebxH8CRgd6MOhq",
-    "uid": "J8mrNRkcqaP1...",
-    "random": 123,
-    "stuff": null
+    "_id": "5fcbde89c5ef0493e50a2fc3",
+    "user": "jay",
+    "channel": "kids",
+    "text": "morning <0/"
   },
   {
-    "_id": "aCustomGivenId",
-    "uid": "J8mrNRkcqaP1...",
-    "random": 456,
-    "otherStuff": [
-      true,
-      false
-    ]
+    "_id": "5fcbdc6dc5ef0493e50a2fc0",
+    "user": "mia",
+    "channel": "kids",
+    "text": "i'm coming"
   }
 ]
 ```
 
-The operation `/r` allows you to read objects (documents/entries) that are stored in a specific array (collection/table).
-A request can be sent only via HTTP method `GET`.
-Through the URLs ending with `/array`, all objects inside this array are retrieved.
+### Query parameters
 
-### HTTP Request
-
-`GET https://qi.do/r/app/array`
-
-### URL Parameters
-
-In the request URL, you must replace `app` and `array` with your respective data.
+Both of these query parameters accept only a JSON string as value.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
-app | The name of the app to be used. | true
-array | The name of the array to be used. | true
+x | The query filter object. | false
+o | The query options object. | false
 
-## Read Specific Objects
-
-```javascript
-// read object with id objectId
-app.read('array/objectId', token)
-  .then(data => console.log(data))
-```
-
-```typescript
-// read object with id objectId
-app.read('array/objectId', token)
-  .then(data => console.log(data))
-```
-
-```shell
-curl https://qi.do/r/app/array/objectId \
--H 'Content-Type: application/json' \
--H 'Authorization: Bearer token'
-```
-
-> HTTP Response:
-
-```json
-{
-  "_id": "objectId",
-  "uid": "J8mrNRkcqaP1...",
-  "random": 123,
-  "stuff": null
-}
-```
-
-A single object can be retrieved by attaching its `id` to the request URL in the form `qi.do/r/app/array/objectId`.
-It is also possible to execute filter queries to return specific objects within an array.
-
-### HTTP Request
+### Read a single object
 
 `GET https://qi.do/r/app/array/objectId`
 
-### URL Parameters
+A single object can be retrieved by attaching its `id` to the request URL.
+
+> <a href="https://qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3 </a>
+
+```javascript
+// read object by id
+app.read('message/5fcbde89c5ef0493e50a2fc3')
+  .then(data => console.log(data))
+```
+
+```typescript
+// read object by id
+app.read('message/5fcbde89c5ef0493e50a2fc3')
+  .then(data => console.log(data))
+```
+
+```shell
+curl https://qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3 \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+{
+  "_id": "5fcbde89c5ef0493e50a2fc3",
+  "user": "jay",
+  "channel": "kids",
+  "text": "morning <0/"
+}
+```
+
+### URL parameters
 
 In the request URL, you must replace `app` and `array` with your respective data.
 
@@ -333,68 +351,68 @@ array | The name of the array to be used. | true
 
 
 
-
-
-
-## Update An Object
-
-```javascript
-// JSON properties to be updated/added
-const props = {
-  random: 456,
-  otherStuff: [true, false]
-}
-// update object by its id
-app.update('array/objectId', props, token)
-  .then(data => console.log(data))
-```
-
-```typescript
-// JSON properties to be updated/added
-const props = {
-  random: 456,
-  otherStuff: [true, false]
-}
-// update object by its id
-app.update('array/objectId', props, token)
-  .then(data => console.log(data))
-```
-
-```shell
-curl https://qi.do/u/app/array/objecId \
---request PUT \
---data '{"random":456,"otherStuff":[true,false]}' \
--H 'Content-Type: application/json' \
--H 'Authorization: Bearer token'
-```
-
-> HTTP Response:
-
-```json
-{
-  "success": "object updated"
-}
-```
+## Update an object
 
 The operation `/u` allows you to update an object inside an array.
 A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
-Using `PUT`, the data of the object to be updated corresponds to the request body.
-Via `GET`, the data needs to be passed as a JSON-string in the query param `x` of the URL, such like `qi.do/u/app/array/objectId?x=json_string`.
 
 ### HTTP Request
 
 `PUT https://qi.do/u/app/array/objectId`
 
-`GET https://qi.do/u/app/array/objectId?x={"random":456,"otherStuff":[true,false]}`
+Using `PUT`, the data of the object to be updated corresponds to the request body.
+
+> <a href='https://qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true} </a>
+
+```javascript
+// properties to be updated/added
+const props = {
+  mood: 'endless boredom',
+  disturb: true
+}
+// update object by id
+app.update('profile/5fcbdc57c5ef0493e50a2fbd', props)
+  .then(data => console.log(data))
+```
+
+```typescript
+// properties to be updated/added
+const props = {
+  mood: 'endless boredom',
+  disturb: true
+}
+// update object by id
+app.update('profile/5fcbdc57c5ef0493e50a2fbd', props)
+  .then(data => console.log(data))
+```
+
+```shell
+curl https://qi.do/u/chat/profile/5fcbdc57c5ef0493e50a2fbd \
+--request PUT \
+--data '{"mood":"endless boredom","disturb":true}' \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+200
+```
+
+`GET https://qi.do/u/app/array/objectId?x=json_string`
+
+Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
 
 ### URL Parameters
 
-In the request URL, you must replace `app` and `array` with your respective data.
+In the request URL, you must replace `app`, `array` and `objectId` with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 array | The name of the array to be used. | true
+objectId | The id of the object to be updated. | true
 
 ### Query Parameters (`GET` Only)
 
@@ -410,46 +428,57 @@ x | The properties to update/add as JSON string. | true
 
 
 
-
-
-
-## Delete An Object
-
-```javascript
-// delete object by its id
-app.delete('array/objectId', token)
-  .then(data => console.log(data))
-```
-
-```typescript
-// delete object by its id
-app.delete('array/objectId', token)
-  .then(data => console.log(data))
-```
-
-```shell
-curl https://qi.do/d/app/array/objecId \
---request DELETE \
--H 'Authorization: Bearer token'
-```
-
-> HTTP Response:
-
-```json
-{
-  "success": "object deleted"
-}
-```
+## Delete an object
 
 The operation `/d` allows you to delete an object from an array.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
-Using both methods, it is just necessary to append the object id in the URL, such as `qi.do/d/app/array/objectId`.
 
 ### HTTP Request
+
 
 `DELETE https://qi.do/d/app/array/objectId`
 
 `GET https://qi.do/d/app/array/objectId`
+
+Using both methods, it is just necessary to append the object id in the URL.
+
+> <a href="https://qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4 </a>
+
+```javascript
+// delete object by id
+app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
+  .then(data => console.log(data))
+```
+
+```typescript
+// delete object by id
+app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
+  .then(data => console.log(data))
+```
+
+```shell
+curl https://qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4 \
+--request DELETE \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+200
+```
+
+### URL Parameters
+
+In the request URL, you must replace `app`, `array` and `objectId` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+array | The name of the array to be used. | true
+objectId | The id of the object to be deleted. | true
+
+
 
 
 
@@ -461,11 +490,6 @@ Using both methods, it is just necessary to append the object id in the URL, suc
 A user object is just like any other object.
 Only the properties `u` (email) and `p` (password) are required.
 A custom user id can be set directly in the request body as `_id`.
-
-
-
-
-
 
 
 
