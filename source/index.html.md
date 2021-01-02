@@ -132,6 +132,10 @@ A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 Using `POST`, the data of the object to be created corresponds to the HTTP request body.
 
+`GET https://qi.do/c/app/array?x=json_string`
+
+If you are using `GET`, the object to be created needs to be passed as JSON string in the URL query param named `x`.
+
 > <a href='https://qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"}' target='_blank'>qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"} </a>
 
 ```javascript
@@ -173,16 +177,17 @@ curl https://qi.do/c/chat/message \
 }
 ```
 
-`GET https://qi.do/c/app/array?x=json_string`
-
-If you are using `GET`, the object to be created needs to be passed as JSON string in the URL query param named `x`.
+You can also define an `ID` for the object that you are creating by attaching it to the request URL, like `.../array/objectId`. 
 
 ### URL parameters
+
+In the request URL, you must replace these parameters with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 array | The name of the array to be used. | true
+objectId | The id of the object to be created. | false
 
 ### Query parameters (`GET` Only)
 
@@ -488,21 +493,39 @@ objectId | The id of the object to be deleted. | true
 # Users
 
 A user object is just like any other object.
-Only the properties `u` (email) and `p` (password) are required.
+Only the properties `u` (username or email) and `p` (password) are required.
 A custom user id can be set directly in the request body as `_id`.
 
 
 
 
-## Create A User
+
+## Create a user
+
+The operation `/c/app/u` allows you to create a user in the requested app.
+A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
+
+### HTTP request
+
+`POST https://qi.do/c/app/u`
+
+Using `POST`, the data of the user to be created corresponds to the request body.
+
+`GET https://qi.do/c/app/u?x=json_string`
+
+`GET https://qi.do/c/app/u/user/pass`
+
+Via `GET`, the data can be also passed as a JSON string in the query param `x` of the URL. Username (or e-mail) and password can be passed directly as URL params.
+
+> <a href='https://qi.do/c/chat/u/test@qi.do/p455w0rd' target='_blank'>qi.do/c/chat/u/test@qi.do/p455w0rd </a>
 
 ```javascript
 // the user to be created
 const user = {
-  u: "test@qi.do",
-  p: "p455w0rd",
+  u: 'test@qi.do',
+  p: 'p455w0rd',
 }
-// create a user on qi.do
+// create a user on the app
 app.create('u', user)
   .then(data => console.log(data))
 ```
@@ -510,10 +533,10 @@ app.create('u', user)
 ```typescript
 // the user to be created
 const user = {
-  u: "test@qi.do",
-  p: "p455w0rd",
+  u: 'test@qi.do',
+  p: 'p455w0rd',
 }
-// create a user on qi.do
+// create a user on the app
 app.create('u', user)
   .then(data => console.log(data))
 ```
@@ -528,24 +551,12 @@ curl https://qi.do/c/app/u \
 
 ```json
 {
-  "success": "object created",
-  "data": {
-    "_id": "5feca140530c0772b232d3e5",
-  }
+  "_id": "5feca140530c0772b232d3e5"
 }
 ```
 
-The operation `/c/app/u` allows you to create a user in the requested app.
-A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
-Using `POST`, the data of the user to be created corresponds to the request body.
-Via `GET`, the data can be passed as a JSON string in the query param `x` of the URL, such like `qi.do/c/app/u?x=json_string`.
-E-mail and password can be passed directly as URL params.
-
-### HTTP Request
-
-`POST https://qi.do/c/app/u`
-
-`GET https://qi.do/c/app/u/test@qi.do/p455w0rd`
+<br/>
+You are free to add any data to the `u` object. The `p` property is encrypted and never shown in the results.
 
 ### URL Parameters
 
@@ -569,7 +580,10 @@ x | The user to create as JSON string. | true
 
 
 
-## Read A User
+## Read users
+
+A single user can be retrieved by attaching its `id` to the request URL in the form `qi.do/r/app/u/userId`.
+It is also possible to execute filter queries to return specific users.
 
 ```javascript
 // read user with id userId
@@ -599,9 +613,6 @@ curl https://qi.do/r/app/u/objectId \
   "disabled": false
 }
 ```
-
-A single user can be retrieved by attaching its `id` to the request URL in the form `qi.do/r/app/u/userId`.
-It is also possible to execute filter queries to return specific users.
 
 ### HTTP Request
 
