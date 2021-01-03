@@ -2,8 +2,9 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - javascript
   - typescript
+  - javascript
+  - html
   - shell
 
 toc_footers:
@@ -65,15 +66,23 @@ Make sure to replace `app` with your app name.
 
 ## Authentication
 
+```typescript
+app.auth('u@u.uu', 'uuuuuu')
+  .then(data => console.log(data))
+```
+
 ```javascript
 // authenticate user on qi.do
 app.auth('u@u.uu', 'uuuuuu')
   .then(data => console.log(data))
 ```
 
-```typescript
-app.auth('u@u.uu', 'uuuuuu')
-  .then(data => console.log(data))
+```html
+<form id="message">
+  <input type="text" name="channel" placeholder="channel">
+  <input type="text" name="text" placeholder="message">
+  <input type="file" name="attachments" multiple>
+</form>
 ```
 
 ```shell
@@ -132,23 +141,11 @@ A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 Using `POST`, the data of the object to be created corresponds to the HTTP request body.
 
-`GET /c/app/array?x=json_string`
+`GET /c/app/array?x=JSON_STRING`
 
 If you are using `GET`, the object to be created needs to be passed as JSON string in the URL query param named `x`.
 
 > <a href='https://qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"}' target='_blank'>qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"} </a>
-
-```javascript
-// object to be created
-const message = {
-  user: 'dad',
-  channel: 'kids',
-  text: 'dinner is ready :)'
-}
-// create object and log response
-app.create('message', message)
-  .then(res => console.log(res))
-```
 
 ```typescript
 // object to be created
@@ -159,7 +156,25 @@ const message = {
 }
 // create object and log response
 app.create('message', message)
-  .then(res => console.log(res))
+  .then(data => console.log(data))
+```
+
+```javascript
+// get your form element
+const form = document.getElementById('message')
+// convert to form data
+const message = new FormData(form)
+// create message along with all files
+app.create('message', message)
+  .then(data => console.log(data))
+```
+
+```html
+<form id="message">
+  <input type="text" name="user">
+  <input type="text" name="channel">
+  <input type="text" name="text">
+</form>
 ```
 
 ```shell
@@ -214,16 +229,20 @@ Through the URLs ending with `/array`, all objects inside this array are retriev
 
 > <a href="https://qi.do/r/chat/message" target="_blank">qi.do/r/chat/message </a>
 
+```typescript
+// read all objects from message array
+app.read('message')
+  .then(data => console.log(data))
+```
+
 ```javascript
 // read all objects from message array
 app.read('message')
   .then(data => console.log(data))
 ```
 
-```typescript
-// read all objects from message array
-app.read('message')
-  .then(data => console.log(data))
+```html
+
 ```
 
 ```shell
@@ -239,7 +258,7 @@ curl https://qi.do/r/chat/message \
 
 ### Read specific objects
 
-`GET /r/app/array?x=json_string&o=json_string`
+`GET /r/app/array?x=JSON_STRING&o=JSON_STRING`
 
 In order to retrieve specific objects, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
@@ -249,6 +268,14 @@ documentation.
 
 > <a href='https://qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3}' target='_blank'>qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3} </a>
 
+```typescript
+// read specific objects from message array
+const filter = {channel: 'kids'}
+const options = {limit: 3}
+app.read('message', filter, options)
+  .then(data => console.log(data))
+```
+
 ```javascript
 // read specific objects from message array
 const filter = {channel: 'kids'}
@@ -257,12 +284,8 @@ app.read('message', filter, options)
   .then(data => console.log(data))
 ```
 
-```typescript
-// read specific objects from message array
-const filter = {channel: 'kids'}
-const options = {limit: 3}
-app.read('message', filter, options)
-  .then(data => console.log(data))
+```html
+
 ```
 
 ```shell
@@ -313,16 +336,20 @@ A single object can be retrieved by attaching its `id` to the request URL.
 
 > <a href="https://qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3 </a>
 
+```typescript
+// read object by id
+app.read('message/5fcbde89c5ef0493e50a2fc3')
+  .then(data => console.log(data))
+```
+
 ```javascript
 // read object by id
 app.read('message/5fcbde89c5ef0493e50a2fc3')
   .then(data => console.log(data))
 ```
 
-```typescript
-// read object by id
-app.read('message/5fcbde89c5ef0493e50a2fc3')
-  .then(data => console.log(data))
+```html
+
 ```
 
 ```shell
@@ -370,26 +397,32 @@ Using `PUT`, the data of the object to be updated corresponds to the request bod
 
 > <a href='https://qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true} </a>
 
-```javascript
+```typescript
 // properties to be updated/added
-const props = {
+const profile = {
   mood: 'endless boredom',
   disturb: true
 }
 // update object by id
-app.update('profile/5fcbdc57c5ef0493e50a2fbd', props)
+app.update('profile/5fcbdc57c5ef0493e50a2fbd', profile)
   .then(data => console.log(data))
 ```
 
-```typescript
-// properties to be updated/added
-const props = {
-  mood: 'endless boredom',
-  disturb: true
-}
-// update object by id
-app.update('profile/5fcbdc57c5ef0493e50a2fbd', props)
-  .then(data => console.log(data))
+```javascript
+// get your form element
+const form = document.getElementById('profile')
+// convert to form data
+const profile = new FormData(form)
+// update profile
+app.update('profile/5fcbdc57c5ef0493e50a2fbd', profile)
+  .then(res => console.log(res))
+```
+
+```html
+<form id="profile">
+  <input type="text" name="mood">
+  <input type="checkbox" name="disturb">
+</form>
 ```
 
 ```shell
@@ -406,7 +439,7 @@ curl https://qi.do/u/chat/profile/5fcbdc57c5ef0493e50a2fbd \
 200
 ```
 
-`GET /u/app/array/objectId?x=json_string`
+`GET /u/app/array/objectId?x=JSON_STRING`
 
 Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
 
@@ -450,16 +483,20 @@ Using both methods, it is just necessary to append the object id in the URL.
 
 > <a href="https://qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4 </a>
 
+```typescript
+// delete object by id
+app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
+  .then(data => console.log(data))
+```
+
 ```javascript
 // delete object by id
 app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
   .then(data => console.log(data))
 ```
 
-```typescript
-// delete object by id
-app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
-  .then(data => console.log(data))
+```html
+
 ```
 
 ```shell
@@ -512,24 +549,15 @@ A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 Using `POST`, the data of the user to be created corresponds to the request body.
 
-`GET /c/app/u?x=json_string`
-
 `GET /c/app/u/user/pass`
 
-Via `GET`, the data can be also passed as a JSON string in the query param `x` of the URL. Username (or e-mail) and password can be passed directly as URL params.
+Via `GET`, username (or e-mail) and password can be passed directly as URL params.
+
+`GET /c/app/u?x=JSON_STRING`
+
+For `GET` requests, the user data can also be passed as a JSON string in the query param `x` of the URL. 
 
 > <a href='https://qi.do/c/chat/u/test@qi.do/p455w0rd' target='_blank'>qi.do/c/chat/u/test@qi.do/p455w0rd </a>
-
-```javascript
-// user to be created
-const user = {
-  u: 'test@qi.do',
-  p: 'p455w0rd',
-}
-// create a user on the app
-app.create('u', user)
-  .then(data => console.log(data))
-```
 
 ```typescript
 // user to be created
@@ -540,6 +568,23 @@ const user = {
 // create a user on the app
 app.create('u', user)
   .then(data => console.log(data))
+```
+
+```javascript
+// get your form element
+const form = document.getElementById('user')
+// convert to form data
+const user = new FormData(form)
+// create user
+app.create('u', user)
+  .then(data => console.log(data))
+```
+
+```html
+<form id="user">
+  <input type="text" name="u">
+  <input type="text" name="p">
+</form>
 ```
 
 ```shell
@@ -561,20 +606,22 @@ You are free to add any data to the `u` object. The `p` property is encrypted an
 
 ### URL parameters
 
-In the request URL, you must replace `app` with your respective data.
+In the request URL, you must replace `app`, `user` and `pass` with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
-u | The user array. | true
+u | The default user array. | true
+user | The username or email of the user. | false
+pass | The password of the user to be created. | false
 
 ### Query parameters (`GET` only)
 
-If you are using `GET`, the JSON object to be created has to be passed in the query param named `x`.
+If you are using `GET`, the object to be created has to be passed as JSON string in the query param named `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
-x | The user to create as JSON string. | true
+x | The user to be created. | true
 
 
 
@@ -595,16 +642,20 @@ Through the URLs ending with `/u`, all users on the `app` are retrieved.
 
 > <a href="https://qi.do/r/chat/u" target="_blank">qi.do/r/chat/u </a>
 
+```typescript
+// read all users on the app
+app.read('u')
+  .then(data => console.log(data))
+```
+
 ```javascript
 // read all users on the app
 app.read('u')
   .then(data => console.log(data))
 ```
 
-```typescript
-// read all users on the app
-app.read('u')
-  .then(data => console.log(data))
+```html
+
 ```
 
 ```shell
@@ -615,12 +666,12 @@ curl https://qi.do/r/chat/u \
 > HTTP response:
 
 ```json
-[...] // all objects inside array
+[...] // all users on the app
 ```
 
 ### Read specific users
 
-`GET /r/app/u?x=json_string&o=json_string`
+`GET /r/app/u?x=JSON_STRING&o=JSON_STRING`
 
 In order to retrieve specific users, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
@@ -630,6 +681,14 @@ documentation.
 
 > <a href='https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3}' target='_blank'>qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} </a>
 
+```typescript
+// read specific objects from message array
+const filter = {channel: 'kids'}
+const options = {limit: 3}
+app.read('u', filter, options)
+  .then(users => console.log(users))
+```
+
 ```javascript
 // read specific objects from message array
 const filter = {disabled: true}
@@ -638,12 +697,8 @@ app.read('u', filter, options)
   .then(users => console.log(users))
 ```
 
-```typescript
-// read specific objects from message array
-const filter = {channel: 'kids'}
-const options = {limit: 3}
-app.read('u', filter, options)
-  .then(users => console.log(users))
+```html
+
 ```
 
 ```shell
@@ -691,16 +746,20 @@ A single user can be retrieved by attaching its `id` to the request URL.
 
 > <a href="https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 </a>
 
+```typescript
+// read user by id
+app.read('u/5fcbde89c5ef0493e50a2fc3')
+  .then(user => console.log(user))
+```
+
 ```javascript
 // read user by id
 app.read('u/5fcbde89c5ef0493e50a2fc3')
   .then(user => console.log(user))
 ```
 
-```typescript
-// read user by id
-app.read('u/5fcbde89c5ef0493e50a2fc3')
-  .then(user => console.log(user))
+```html
+
 ```
 
 ```shell
@@ -721,12 +780,12 @@ curl https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 \
 
 ### URL parameters
 
-In the request URL, you must replace `app` and `array` with your respective data.
+In the request URL, you must replace `app` and `userId` with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
-array | The name of the array to be used. | true
+u | The default user array. | true
 userId | The id of the user to be retrieved. | false
 
 
@@ -748,26 +807,32 @@ Using `PUT`, the data of the user to be updated corresponds to the request body.
 
 > <a href='https://qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true} </a>
 
-```javascript
-// properties to be updated/added
-const props = {
-  mood: 'endless boredom',
-  disturb: true
-}
-// update user by id
-app.update('u/5fcbdc57c5ef0493e50a2fbd', props)
-  .then(data => console.log(data))
-```
-
 ```typescript
 // properties to be updated/added
-const props = {
+const user = {
   mood: 'endless boredom',
   disturb: true
 }
 // update user by id
-app.update('u/5fcbdc57c5ef0493e50a2fbd', props)
-  .then(data => console.log(data))
+app.update('u/5fcbdc57c5ef0493e50a2fbd', user)
+  .then(res => console.log(res))
+```
+
+```javascript
+// get your form element
+const form = document.getElementById('user')
+// convert to form data
+const user = new FormData(form)
+// create message along with all files
+app.update('u/5fcbdc57c5ef0493e50a2fbd', user)
+  .then(res => console.log(res))
+```
+
+```html
+<form id="user">
+  <input type="text" name="mood">
+  <input type="checkbox" name="disturb">
+</form>
 ```
 
 ```shell
@@ -784,18 +849,18 @@ curl https://qi.do/u/chat/u/5fcbdc57c5ef0493e50a2fbd \
 200
 ```
 
-`GET /u/app/u/userId?x=json_string`
+`GET /u/app/u/userId?x=JSON_STRING`
 
 Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
 
 ### URL parameters
 
-In the request URL, you must replace `app`, `array` and `userId` with your respective data.
+In the request URL, you must replace `app` and `userId` with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
-array | The name of the array to be used. | true
+u | The default user array. | true
 userId | The id of the user to be updated. | true
 
 ### Query parameters (`GET` only)
@@ -827,16 +892,20 @@ Using both methods, it is just necessary to append the user id in the URL.
 
 > <a href="https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 </a>
 
+```typescript
+// delete user by id
+app.delete('u/5fcbdeb1c5ef0493e50a2fc4')
+  .then(res => console.log(res))
+```
+
 ```javascript
 // delete user by id
 app.delete('u/5fcbdeb1c5ef0493e50a2fc4')
   .then(res => console.log(res))
 ```
 
-```typescript
-// delete user by id
-app.delete('u/5fcbdeb1c5ef0493e50a2fc4')
-  .then(res => console.log(res))
+```html
+
 ```
 
 ```shell
@@ -853,12 +922,12 @@ curl https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace `app`, `array` and `userId` with your respective data.
+In the request URL, you must replace `app` and `userId` with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
-array | The name of the array to be used. | true
+u | The default user array. | true
 userId | The id of the user to be deleted. | true
 
 
@@ -870,90 +939,20 @@ userId | The id of the user to be deleted. | true
 
 # Files
 
-A file object is also just like any other object.
+A file object also just looks like any other object.
 For every file in the request, an object in the `f` array is created.
 The data of the uploaded files are also stored in the newly created object of the requested array.
-That means it is possible to upload files onto no mather what array.
+That means it is possible to upload files onto no mather which array.
 
 
 
 
 
 
+## Upload a file (create)
 
-
-
-
-
-## Create A File
-
-```javascript
-// the object with files to be uploaded
-const object = {
-  otherStuff: "everything is possible",
-  files: [],
-  path: "custom/path"
-}
-// create a file on qi.do
-app.create('array', object, token)
-  .then(data => console.log(data))
-```
-
-```typescript
-// the object with files to be uploaded
-const object = {
-  otherStuff: "everything is possible",
-  files: [],
-  path: "custom/path"
-}
-// create a file on qi.do
-app.create('array', object, token)
-  .then(data => console.log(data))
-```
-
-```shell
-curl https://qi.do/c/app/array \
--d '{"files":[],"path":"custom/path"}' \
--H 'Content-Type: application/json'
-```
-
-> HTTP Response:
-
-```json
-{
-  "success": "object created",
-  "data": {
-    "_id": "5fbf9947f54f0cdad0cf1386",
-    "otherStuff": "everything is possible",
-    "files": [
-      {
-        "_id": "5fbf9947f54f0cdad0cf1387",
-        "field": "fotos",
-        "array": "array",
-        "path": "custom/path",
-        "name": "fileName.png",
-        "url": "https://f.qi.do...",
-        "uid": "5fbe9efd8370f4c15f6e91d6"
-      },
-      {
-        "_id": "5fbf9947f54f0cdad0cf1388",
-        "field": "fotos",
-        "array": "array",
-        "path": "custom/path/file.pdf",
-        "name": "file.pdf",
-        "url": "https://f.qi.do...",
-        "uid": "5fbe9efd8370f4c15f6e91d6"
-      }
-    ],
-    "uid": "5fbe9efd8370f4c15f6e91d6"
-  }
-}
-```
-
-The operation `/c` allows you to upload files onto the requested app.
+The operation `/c` also allows you to upload files onto the requested app.
 A request can be sent through the HTTP methods `POST` and `PUT` (with operation `/u`).
-All files in the same request are upload to the specified `path` in the request body.
-If a request does not contain `path`, then all files are uploaded to a new automatically created user directory.
 
 ### HTTP Request
 
@@ -961,9 +960,72 @@ If a request does not contain `path`, then all files are uploaded to a new autom
 
 `PUT /u/app/array`
 
+All files in the same request are uploaded to the specified `_path` in the request body.
+If a request does not contain `_path`, then all files are uploaded to a new automatically created user directory.
+
+```typescript
+// get your form element
+const form = document.getElementById('message')
+// convert to form data
+const message = new FormData(form)
+// create message along with all files
+app.create('message', message)
+  .then(data => console.log(data))
+```
+
+```javascript
+// get your form element
+const form = document.getElementById('message')
+// convert to form data
+const message = new FormData(form)
+// create message along with all files
+app.create('message', message)
+  .then(data => console.log(data))
+```
+
+```html
+<form id="message">
+  <input type="text" name="user">
+  <input type="text" name="channel">
+  <input type="text" name="text">
+  <input type="file" name="attachments" multiple>
+</form>
+```
+
+```shell
+curl https://qi.do/c/chat/message \
+-d '{"files":[],"path":"custom/path"}' \
+-H 'Content-Type: application/json'
+```
+
+> HTTP response:
+
+```json
+{
+  "_id": "5fbf9947f54f0cdad0cf1386",
+  "user": "dad",
+  "channel": "family",
+  "text": "everything is possible",
+  "_f": [
+    {
+      "_id": "5fbf9947f54f0cdad0cf1387",
+      "name": "angry-cat.png",
+      "url": "https://f.qi.do...",
+      "prop": "attachments"
+    },
+    {
+      "_id": "5fbf9947f54f0cdad0cf1388",
+      "name": "farm-robot.pdf",
+      "url": "https://f.qi.do...",
+      "prop": "attachments"
+    }
+  ]
+}
+```
+
 ### URL parameters
 
-In the request URL, you must replace `app` with your respective data.
+In the request URL, you must replace `app` and `array` with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -975,260 +1037,231 @@ array | The name of the array to be used. | true
 
 
 
-## Read Files
 
-```javascript
-// read file with id fileId
-app.read('f/fileId', token)
+## Read files
+
+The operation `/r/app/f` allows you to read files that are stored on the `app`.
+A request can be sent only via HTTP method `GET`.
+
+### Read all files
+
+`GET /r/app/f`
+
+Through the URLs ending with `/f`, all files on the `app` are retrieved.
+
+> <a href="https://qi.do/r/chat/f" target="_blank">qi.do/r/chat/f </a>
+
+```typescript
+// read all files on the app
+app.read('f')
   .then(data => console.log(data))
 ```
 
-```typescript
-// read file with id fileId
-app.read('f/fileId', token)
+```javascript
+// read all files on the app
+app.read('f')
   .then(data => console.log(data))
+```
+
+```html
+
 ```
 
 ```shell
-curl https://qi.do/r/app/f/fileId \
+curl https://qi.do/r/chat/f \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+> HTTP response:
+
+```json
+[...] // all files on the app
+```
+
+### Read specific files
+
+`GET /r/app/f?x=JSON_STRING&o=JSON_STRING`
+
+In order to retrieve specific files, you have to set a filter to the query param `x` in the request URL.
+One can also **sort** and **paginate** queries by sending the options via query param `o`.
+For more details about how to query files with `qi.do`, please refer to the
+<a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
+documentation.
+
+> <a href='https://qi.do/r/chat/f?x={"_path":"cutom/path"}&o={"limit":2}' target='_blank'>qi.do/r/chat/f?x={"_path":"cutom/path"}&o={"limit":2} </a>
+
+```typescript
+// read specific files on the app
+const filter = {_path: 'cutom/path'}
+const options = {limit: 2}
+app.read('f', filter, options)
+  .then(files => console.log(files))
+```
+
+```javascript
+// read specific files on the app
+const filter = {path: 'custom/path'}
+const options = {limit: 2}
+app.read('f', filter, options)
+  .then(files => console.log(files))
+```
+
+```html
+
+```
+
+```shell
+curl https://qi.do/r/chat/f?x={"_path":"custom/path"}&o={"limit":2} \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
 
-> HTTP Response:
-
-```json
-{
-  "_id": "5fbf9947f54f0cdad0cf1388",
-  "field": "files",
-  "array": "array",
-  "path": "custom/path/file.pdf",
-  "name": "file.pdf",
-  "url": "https://f.qi.do...",
-  "uid": "5fbe9efd8370f4c15f6e91d6"
-}
-```
-
-The operation `/r/app/f` allows a user to read its own files.
-A request can be sent only via HTTP `GET` method.
-A single file can be retrieved by sending its ID in the request URL, such like `qi.do/r/app/f/fileId`.
-Through the URLs ending with `/f`, one can read all files or filter them as any other query.
-
-### HTTP Request
-
-`GET /r/app/f/fileId`
-
-`GET /r/app/f`
-
-`GET /r/app/f?x={"path":"path/to/files"}`
-
-### URL parameters
-
-In the request URL, you must replace `app` with your respective data.
-
-Parameter | Description | Required
---------- | ----------- |  -----------
-app | The name of the app to be used. | true
-f | The file array. | true
-
-
-
-
-
-
-## Delete A File
-
-```javascript
-// delete file by its id
-app.delete('f/fileId', token)
-  .then(data => console.log(data))
-```
-
-```typescript
-// delete file by its id
-app.delete('f/fileId', token)
-  .then(data => console.log(data))
-```
-
-```shell
-curl https://qi.do/d/app/f/fileId \
---request DELETE \
--H 'Authorization: Bearer token'
-```
-
-> HTTP Response:
-
-```json
-{
-  "success": "object deleted"
-}
-```
-The operation `/d` allows a user to delete its own files.
-A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
-
-
-### HTTP Request
-
-`DELETE /d/app/f/fileId`
-
-`GET /d/app/f/fileId`
-
-
-
-
-
-
-
-
-# Kittens
-
-## Get All Kittens
-
-
-```typescript
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens" \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> HTTP response:
 
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "_id": "5fbf9947f54f0cdad0cf1387",
+    "_path": "custom/path",
+    "name": "angry-cat.png",
+    "url": "https://f.qi.do...",
+    "prop": "attachments",
+    "array": "message",
+    "_uid": "5fbf99d47f54df0dad0f1323"
   },
   {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "_id": "5fbf9947f54f0cdad0cf1388",
+    "_path": "custom/path",
+    "name": "farm-robot.pdf",
+    "url": "https://f.qi.do...",
+    "prop": "attachments",
+    "array": "message",
+    "_uid": "5fbf99d47f54df0dad0f1323"
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
 ### Query parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Both of these query parameters accept a JSON string as value.
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
+Parameter | Description | Required
+--------- | ----------- |  -----------
+x | The query filter object. | false
+o | The query options object. | false
 
-## Get a Specific Kitten
+### Read a single file
+
+`GET /r/app/f/fileId`
+
+A single user can be retrieved by attaching its `id` to the request URL.
+
+> <a href="https://qi.do/r/chat/f/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/f/5fcbde89c5ef0493e50a2fc3 </a>
 
 ```typescript
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
+// read file by id
+app.read('f/5fcbde89c5ef0493e50a2fc3')
+  .then(user => console.log(user))
 ```
 
 ```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+// read file by id
+app.read('f/5fcbde89c5ef0493e50a2fc3')
+  .then(user => console.log(user))
 ```
 
-> The above command returns JSON structured like this:
+```html
 
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```typescript
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
 ```
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
+curl https://qi.do/r/chat/f/5fbf9947f54f0cdad0cf1387 \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
+> HTTP response:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "_id": "5fbf9947f54f0cdad0cf1387",
+  "_path": "custom/path",
+  "name": "angry-cat.png",
+  "url": "https://f.qi.do...",
+  "prop": "attachments",
+  "array": "message",
+  "_uid": "5fbf99d47f54df0dad0f1323"
 }
 ```
 
-This endpoint deletes a specific kitten.
+### URL parameters
+
+In the request URL, you must replace `app` and `fileId` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+u | The default user array. | true
+fileId | The id of the file to be retrieved. | false
+
+
+
+
+
+
+
+
+## Delete a file
+
+The operation `/d/app/u` allows you to delete a file from an `app`.
+A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`DELETE /d/app/u/fileId`
+
+`GET /d/app/u/fileId`
+
+Using both methods, it is just necessary to append the file id in the URL.
+
+> <a href="https://qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4 </a>
+
+```typescript
+// delete file by id
+app.delete('f/5fcbdeb1c5ef0493e50a2fc4')
+  .then(res => console.log(res))
+```
+
+```javascript
+// delete file by id
+app.delete('f/5fcbdeb1c5ef0493e50a2fc4')
+  .then(res => console.log(res))
+```
+
+```html
+
+```
+
+```shell
+curl https://qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4 \
+--request DELETE \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+200
+```
 
 ### URL parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+In the request URL, you must replace `app` and `fileId` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+f | The default file array. | true
+fileId | The id of the user to be deleted. | true
+
 
