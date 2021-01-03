@@ -1,0 +1,476 @@
+# Users
+
+A user object behaves almost like any other object.
+The main difference is that the properties `u` (username or email) and `p` (password) are required.
+A custom user id can be set directly in the request body as `_id`.
+
+## Create a user
+
+The operation `/c/app/u` allows you to create a user in the requested app.
+A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
+
+### HTTP request
+
+`POST /c/app/u`
+
+Using `POST`, the data of the user to be created corresponds to the request body.
+
+`GET /c/app/u/user/pass`
+
+Via `GET`, username (or e-mail) and password can be passed directly as URL params.
+
+`GET /c/app/u?x=JSON_STRING`
+
+For `GET` requests, the user data can also be passed as a JSON string in the query param `x` of the URL.
+
+> <a href='https://qi.do/c/chat/u/dad@example.com/p455w0rd' target='_blank'>qi.do/c/chat/u/dad@example.com/p455w0rd </a>
+
+```typescript
+// user to be created
+const user = {
+  u: 'dad@example.com',
+  p: 'p455w0rd',
+}
+// create a user on the app
+app.create('u', user)
+  .then(data => console.log(data))
+```
+
+```javascript
+// get your form element
+const form = document.getElementById('user')
+// convert to form data
+const user = new FormData(form)
+// create user
+app.create('u', user)
+  .then(data => console.log(data))
+```
+
+```html
+<form id="user">
+  <input type="text" name="u" value="dad@example.com">
+  <input type="text" name="p" value="p455w0rd">
+</form>
+```
+
+```shell
+curl https://qi.do/c/chat/u \
+-d '{"u":"dad@example.com","p":"p455w0rd"}' \
+-H 'Content-Type: application/json'
+```
+
+> HTTP Response:
+
+```json
+{
+  "_id": "5feca140530c0772b232d3e5"
+}
+```
+
+<br/>
+You are free to add any data to the `u` object. The `p` property is encrypted and never shown in the results.
+
+### URL parameters
+
+In the request URL, you must replace `app`, `user` and `pass` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+u | The default user array. | true
+user | The username or email of the user. | false
+pass | The password of the user to be created. | false
+
+### Query parameters (`GET` only)
+
+If you are using `GET`, the object to be created has to be passed as JSON string in the query param named `x`.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+x | The user to be created. | true
+
+
+
+
+
+
+## Authenticate a user
+
+The operation `/a` allows a user to authenticate with email (or username) and password. 
+A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
+If the user data matches, a JWT (JSON Web Token) is sent with the response.
+All the other operations can then be authorized with this token.
+
+### HTTP Request
+
+`POST /a/app`
+
+Using `POST`, user/email and password of the user to be authenticated corresponds to the request body.
+
+`GET /a/app/user/pass`
+
+`GET /a/app/user/pass/expires`
+
+Via `GET`, the login data should be in the URL parameters.
+
+> <a href='https://qi.do/a/chat/dad@example.com/p455w0rd' target='_blank'>qi.do/a/chat/dad@example.com/p455w0rd </a>
+
+```typescript
+// user data
+const login = {
+  u: 'dad@example.com',
+  p: 'p455w0rd',
+  e: '7d'
+}
+// authenticate user
+app.auth(login)
+  .then(data => console.log(data))
+```
+
+```javascript
+// get your form element
+const form = document.getElementById('login')
+// convert to form data
+const login = new FormData(form)
+// authenticate user
+app.auth(login)
+  .then(data => console.log(data))
+```
+
+```html
+<form id="login">
+  <input type="text" name="u" value="dad@example.com">
+  <input type="text" name="p" value="p455w0rd">
+  <input type="text" name="e" value="7d">
+</form>
+```
+
+```shell
+curl https://qi.do/a/chat/dad@example.com/p455w0rd/7d
+```
+
+> HTTP Response:
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIs..."
+}
+```
+
+### URL parameters
+
+In the request URL, you must replace `app`, `user`, `pass` and `expires` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+user | The user (email address) to log in. | false
+pass | The password of the user. | false
+expires | The time period until which the token should be valid, in the form `30s`, `2h`, `7d`. Default value is `1h`. | false
+
+
+
+
+
+
+
+## Read users
+
+The operation `/r/app/u` allows you to read users that are registered on the `app`.
+A request can be sent only via HTTP method `GET`.
+
+### Read all users
+
+`GET /r/app/u`
+
+Through the URLs ending with `/u`, all users on the `app` are retrieved.
+
+> <a href="https://qi.do/r/chat/u" target="_blank">qi.do/r/chat/u </a>
+
+```typescript
+// read all users on the app
+app.read('u')
+  .then(data => console.log(data))
+```
+
+```javascript
+// read all users on the app
+app.read('u')
+  .then(data => console.log(data))
+```
+
+```html
+
+```
+
+```shell
+curl https://qi.do/r/chat/u \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+> HTTP response:
+
+```json
+[...] // all users on the app
+```
+
+### Read specific users
+
+`GET /r/app/u?x=JSON_STRING&o=JSON_STRING`
+
+In order to retrieve specific users, you have to set a filter to the query param `x` in the request URL.
+One can also **sort** and **paginate** queries by sending the options via query param `o`.
+For more details about how to query users with `qi.do`, please refer to the
+<a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
+documentation.
+
+> <a href='https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3}' target='_blank'>qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} </a>
+
+```typescript
+// read specific objects from message array
+const filter = {channel: 'kids'}
+const options = {limit: 3}
+app.read('u', filter, options)
+  .then(users => console.log(users))
+```
+
+```javascript
+// read specific objects from message array
+const filter = {disabled: true}
+const options = {limit: 3}
+app.read('u', filter, options)
+  .then(users => console.log(users))
+```
+
+```html
+
+```
+
+```shell
+curl https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+[
+  {
+    "_id": "5feca140530c0772b232d3e5",
+    "u": "kai",
+    "disabled": true
+  },
+  {
+    "_id": "5fcbde89c5ef0493e50a2fc3",
+    "u": "tai",
+    "disabled": true
+  },
+  {
+    "_id": "5fcbde89c2ef0433e50a2fc7",
+    "u": "nai",
+    "disabled": true
+  }
+]
+```
+
+### Query parameters
+
+Both of these query parameters accept a JSON string as value.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+x | The query filter object. | false
+o | The query options object. | false
+
+### Read a single user
+
+`GET /r/app/u/userId`
+
+A single user can be retrieved by attaching its `id` to the request URL.
+
+> <a href="https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 </a>
+
+```typescript
+// read user by id
+app.read('u/5fcbde89c5ef0493e50a2fc3')
+  .then(user => console.log(user))
+```
+
+```javascript
+// read user by id
+app.read('u/5fcbde89c5ef0493e50a2fc3')
+  .then(user => console.log(user))
+```
+
+```html
+
+```
+
+```shell
+curl https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+{
+  "_id": "5fcbde89c5ef0493e50a2fc3",
+  "u": "jay",
+  "disabled": false
+}
+```
+
+### URL parameters
+
+In the request URL, you must replace `app` and `userId` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+u | The default user array. | true
+userId | The id of the user to be retrieved. | false
+
+
+
+
+
+
+
+## Update a user
+
+The operation `/u/app/u` allows you to update a `user` on an `app`.
+A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
+
+### HTTP Request
+
+`PUT /u/app/u/userId`
+
+Using `PUT`, the data of the user to be updated corresponds to the request body.
+
+> <a href='https://qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true} </a>
+
+```typescript
+// properties to be updated/added
+const user = {
+  mood: 'endless boredom',
+  disturb: true
+}
+// update user by id
+app.update('u/5fcbdc57c5ef0493e50a2fbd', user)
+  .then(res => console.log(res))
+```
+
+```javascript
+// get your form element
+const form = document.getElementById('user')
+// convert to form data
+const user = new FormData(form)
+// create message along with all files
+app.update('u/5fcbdc57c5ef0493e50a2fbd', user)
+  .then(res => console.log(res))
+```
+
+```html
+<form id="user">
+  <input type="text" name="mood" value="endless boredom">
+  <input type="checkbox" name="disturb" checked>
+</form>
+```
+
+```shell
+curl https://qi.do/u/chat/u/5fcbdc57c5ef0493e50a2fbd \
+--request PUT \
+--data '{"mood":"endless boredom","disturb":true}' \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+200
+```
+
+`GET /u/app/u/userId?x=JSON_STRING`
+
+Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
+
+### URL parameters
+
+In the request URL, you must replace `app` and `userId` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+u | The default user array. | true
+userId | The id of the user to be updated. | true
+
+### Query parameters (`GET` only)
+
+If you are using `GET`, the properties to be updated/added have to be passed in the query param named `x`.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+x | The properties to update/add as JSON string. | true
+
+
+
+
+
+
+
+## Delete a user
+
+The operation `/d/app/u` allows you to delete a user from an `app`.
+A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
+
+### HTTP Request
+
+`DELETE /d/app/u/userId`
+
+`GET /d/app/u/userId`
+
+Using both methods, it is just necessary to append the user id in the URL.
+
+> <a href="https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 </a>
+
+```typescript
+// delete user by id
+app.delete('u/5fcbdeb1c5ef0493e50a2fc4')
+  .then(res => console.log(res))
+```
+
+```javascript
+// delete user by id
+app.delete('u/5fcbdeb1c5ef0493e50a2fc4')
+  .then(res => console.log(res))
+```
+
+```html
+
+```
+
+```shell
+curl https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 \
+--request DELETE \
+-H 'Authorization: Bearer token'
+```
+
+> HTTP response:
+
+```json
+200
+```
+
+### URL parameters
+
+In the request URL, you must replace `app` and `userId` with your respective data.
+
+Parameter | Description | Required
+--------- | ----------- |  -----------
+app | The name of the app to be used. | true
+u | The default user array. | true
+userId | The id of the user to be deleted. | true
