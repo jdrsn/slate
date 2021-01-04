@@ -1,13 +1,12 @@
 # Users
 
-A user object behaves almost like any other object.
-The main difference is that the properties `u` (username or email) and `p` (password) are required.
+A user object looks almost like any other object.
+The main difference is that the properties `u` (username or email) and `p` (password) are required for a user to log in.
 
 ## Create a user
 
 The operation `/c/<app>/u` allows you to create a user in the requested app.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
-A custom user id can be set directly in the request body as `_id`.
 
 ### HTTP endpoints
 
@@ -21,7 +20,7 @@ Via `GET`, username (or e-mail) and password can be passed directly as URL param
 
 `GET /c/<app>/u?x=<JSON>`
 
-For `GET` requests, the user data can also be passed as a JSON string in the query param `x` of the URL.
+For `GET` requests, the user data can also be passed as JSON string in the query param `x` of the URL.
 
 > <a href='https://qi.do/c/chat/u/dad@example.com/p455w0rd' target='_blank'>qi.do/c/chat/u/dad@example.com/p455w0rd </a>
 
@@ -68,11 +67,14 @@ curl https://qi.do/c/chat/u \
 ```
 
 <br/>
-You are free to add any data to a `u` object. The `p` property is encrypted and never shown in the results.
+The JSON-encoded response contains the `id` of the newly created user.
+A custom user id can be set directly in the request body as `_id`.
+You are free to add any data to a `u` object.
+The `p` property is encrypted and never shown in the results.
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below with your respective data.
+In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -228,7 +230,7 @@ documentation.
 > <a href='https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3}' target='_blank'>qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} </a>
 
 ```typescript
-// read specific objects from message array
+// read specific users
 const filter = {channel: 'kids'}
 const options = {limit: 3}
 app.read('u', filter, options)
@@ -236,7 +238,7 @@ app.read('u', filter, options)
 ```
 
 ```javascript
-// read specific objects from message array
+// read specific users
 const filter = {disabled: true}
 const options = {limit: 3}
 app.read('u', filter, options)
@@ -276,7 +278,7 @@ curl https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} \
 
 ### Query parameters
 
-Both of these query parameters accept a JSON string as value.
+Both of these query parameters accept JSON string as value.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -325,7 +327,7 @@ curl https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below with your respective data.
+In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -349,6 +351,10 @@ A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
 `PUT /u/<app>/u/<id>`
 
 Using `PUT`, the data of the user to be updated corresponds to the request body.
+
+`GET /u/<app>/u/<id>?x=<JSON>`
+
+Via `GET`, the data needs to be passed as JSON string in the query param `x` of the URL.
 
 > <a href='https://qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true} </a>
 
@@ -394,13 +400,9 @@ curl https://qi.do/u/chat/u/5fcbdc57c5ef0493e50a2fbd \
 200
 ```
 
-`GET /u/app/u/userId?x=<JSON>`
-
-Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
-
 ### URL parameters
 
-In the request URL, you must replace the parameters below with your respective data.
+In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -424,7 +426,7 @@ x | The properties to updated/added. | true
 
 ## Delete a user
 
-The operation `/d/<app>/u` allows you to delete a user from an `app`.
+The operation `/d/<app>/u` allows you to delete a user from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP Request
@@ -466,7 +468,7 @@ curl https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below with your respective data.
+In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------

@@ -105,7 +105,7 @@ The operation `/r` allows you to read objects (documents/entries) that are store
 
 `GET /r/<app>/<array>`
 
-Through the endpoints ending with `/<array>`, all objects in this array are retrieved.
+Through the endpoints ending with `<array>`, all objects in this array are retrieved.
 
 > <a href="https://qi.do/r/chat/message" target="_blank">qi.do/r/chat/message </a>
 
@@ -200,7 +200,7 @@ curl https://qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3} \
 
 ### Query parameters
 
-Both of these query parameters accept a JSON string as value.
+Both of these query parameters accept JSON string as value.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -276,7 +276,7 @@ Using `PUT`, the object data to be updated corresponds to the request body.
 
 `GET /u/<app>/<array>/<id>?x=<JSON>`
 
-Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
+Via `GET`, the data needs to be passed as JSON string in the query param `x` of the URL.
 
 > <a href='https://qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true} </a>
 

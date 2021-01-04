@@ -1,9 +1,8 @@
 # Files
 
-A file object also just looks like any other object.
-For every file in the request, an object in the `f` array is created.
-The data of the uploaded files are also stored in the newly created object of the requested array.
-That means it is possible to upload files onto no mather which array.
+It is possible to upload files onto any array.
+The uploaded files are referenced in the newly created object.
+Also, for every file in a request, an object is created in the `f` array of the requested app.
 
 ## Upload a file (create)
 
@@ -62,26 +61,12 @@ curl https://qi.do/c/chat/message \
 
 ```json
 {
-  "_id": "5fbf9947f54f0cdad0cf1386",
-  "user": "dad",
-  "channel": "family",
-  "text": "everything is possible",
-  "_f": [
-    {
-      "_id": "5fbf9947f54f0cdad0cf1387",
-      "name": "angry-cat.png",
-      "url": "https://f.qi.do...",
-      "prop": "attachments"
-    },
-    {
-      "_id": "5fbf9947f54f0cdad0cf1388",
-      "name": "farm-robot.pdf",
-      "url": "https://f.qi.do...",
-      "prop": "attachments"
-    }
-  ]
+  "_id": "5fbf9947f54f0cdad0cf1386"
 }
 ```
+
+<br/>
+The JSON-encoded response contains the `id` of the newly created object related to the uploaded files.
 
 ### URL parameters
 
@@ -91,6 +76,7 @@ Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 array | The name of the array to be used. | true
+id | The id of the object to be created. | false
 
 
 
@@ -202,7 +188,7 @@ curl https://qi.do/r/chat/f?x={"_path":"custom/path"}&o={"limit":2} \
 
 ### Query parameters
 
-Both of these query parameters accept a JSON string as value.
+Both of these query parameters accept JSON string as value.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -254,12 +240,12 @@ curl https://qi.do/r/chat/f/5fbf9947f54f0cdad0cf1387 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below with your respective data.
+In the request URL, you must replace the parameters below (excluding `f`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
-u | The default user array. | true
+f | The default file array. | true
 id | The id of the file to be retrieved. | false
 
 
@@ -271,14 +257,14 @@ id | The id of the file to be retrieved. | false
 
 ## Delete a file
 
-The operation `/d/<app>/u` allows you to delete a file from an app.
+The operation `/d/<app>/f` allows you to delete a file from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`DELETE /d/<app>/u/<id>`
+`DELETE /d/<app>/f/<id>`
 
-`GET /d/<app>/u/<id>`
+`GET /d/<app>/f/<id>`
 
 Using both methods, it is just necessary to append the file `id` in the URL.
 
@@ -313,7 +299,7 @@ curl https://qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below with your respective data.
+In the request URL, you must replace the parameters below (excluding `f`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
