@@ -2,24 +2,24 @@
 
 A user object behaves almost like any other object.
 The main difference is that the properties `u` (username or email) and `p` (password) are required.
-A custom user id can be set directly in the request body as `_id`.
 
 ## Create a user
 
-The operation `/c/app/u` allows you to create a user in the requested app.
+The operation `/c/<app>/u` allows you to create a user in the requested app.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
+A custom user id can be set directly in the request body as `_id`.
 
-### HTTP request
+### HTTP endpoints
 
-`POST /c/app/u`
+`POST /c/<app>/u`
 
 Using `POST`, the data of the user to be created corresponds to the request body.
 
-`GET /c/app/u/user/pass`
+`GET /c/<app>/u/<user>/<pass>`
 
 Via `GET`, username (or e-mail) and password can be passed directly as URL params.
 
-`GET /c/app/u?x=JSON_STRING`
+`GET /c/<app>/u?x=<JSON>`
 
 For `GET` requests, the user data can also be passed as a JSON string in the query param `x` of the URL.
 
@@ -68,11 +68,11 @@ curl https://qi.do/c/chat/u \
 ```
 
 <br/>
-You are free to add any data to the `u` object. The `p` property is encrypted and never shown in the results.
+You are free to add any data to a `u` object. The `p` property is encrypted and never shown in the results.
 
 ### URL parameters
 
-In the request URL, you must replace `app`, `user` and `pass` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -81,7 +81,7 @@ u | The default user array. | true
 user | The username or email of the user. | false
 pass | The password of the user to be created. | false
 
-### Query parameters (`GET` only)
+### Query parameters
 
 If you are using `GET`, the object to be created has to be passed as JSON string in the query param named `x`.
 
@@ -98,18 +98,16 @@ x | The user to be created. | true
 
 The operation `/a` allows a user to authenticate with email (or username) and password. 
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
-If the user data matches, a JWT (JSON Web Token) is sent with the response.
-All the other operations can then be authorized with this token.
 
-### HTTP Request
+### HTTP endpoints
 
-`POST /a/app`
+`POST /a/<app>`
 
 Using `POST`, user/email and password of the user to be authenticated corresponds to the request body.
 
-`GET /a/app/user/pass`
+`GET /a/<app>/<user>/<pass>`
 
-`GET /a/app/user/pass/expires`
+`GET /a/<app>/<user>/<pass>/<expires>`
 
 Via `GET`, the login data should be in the URL parameters.
 
@@ -157,9 +155,13 @@ curl https://qi.do/a/chat/dad@example.com/p455w0rd/7d
 }
 ```
 
+<br/>
+If the user data matches, a JWT (JSON Web Token) is sent with the response.
+All the other operations can then be authorized with this token.
+
 ### URL parameters
 
-In the request URL, you must replace `app`, `user`, `pass` and `expires` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -176,14 +178,13 @@ expires | The time period until which the token should be valid, in the form `30
 
 ## Read users
 
-The operation `/r/app/u` allows you to read users that are registered on the `app`.
-A request can be sent only via HTTP method `GET`.
+The operation `/r/<app>/u` allows you to read users that are registered on an app.
 
 ### Read all users
 
-`GET /r/app/u`
+`GET /r/<app>/u`
 
-Through the URLs ending with `/u`, all users on the `app` are retrieved.
+Through the URLs ending with `/u`, all users on the requested app are retrieved.
 
 > <a href="https://qi.do/r/chat/u" target="_blank">qi.do/r/chat/u </a>
 
@@ -216,11 +217,11 @@ curl https://qi.do/r/chat/u \
 
 ### Read specific users
 
-`GET /r/app/u?x=JSON_STRING&o=JSON_STRING`
+`GET /r/<app>/u?x=<JSON>&o=<JSON>`
 
 In order to retrieve specific users, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
-For more details about how to query users with `qi.do`, please refer to the
+For more details about how to query users with qi.do, please refer to the
 <a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
 documentation.
 
@@ -243,7 +244,6 @@ app.read('u', filter, options)
 ```
 
 ```html
-
 ```
 
 ```shell
@@ -285,7 +285,7 @@ o | The query options object. | false
 
 ### Read a single user
 
-`GET /r/app/u/userId`
+`GET /r/<app>/u/<id>`
 
 A single user can be retrieved by attaching its `id` to the request URL.
 
@@ -325,13 +325,13 @@ curl https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 \
 
 ### URL parameters
 
-In the request URL, you must replace `app` and `userId` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 u | The default user array. | true
-userId | The id of the user to be retrieved. | false
+id | The id of the user to be retrieved. | false
 
 
 
@@ -341,12 +341,12 @@ userId | The id of the user to be retrieved. | false
 
 ## Update a user
 
-The operation `/u/app/u` allows you to update a `user` on an `app`.
+The operation `/u/<app>/u` allows you to update a user on an app.
 A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
 
-### HTTP Request
+### HTTP endpoints
 
-`PUT /u/app/u/userId`
+`PUT /u/<app>/u/<id>`
 
 Using `PUT`, the data of the user to be updated corresponds to the request body.
 
@@ -394,27 +394,27 @@ curl https://qi.do/u/chat/u/5fcbdc57c5ef0493e50a2fbd \
 200
 ```
 
-`GET /u/app/u/userId?x=JSON_STRING`
+`GET /u/app/u/userId?x=<JSON>`
 
 Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
 
 ### URL parameters
 
-In the request URL, you must replace `app` and `userId` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 u | The default user array. | true
-userId | The id of the user to be updated. | true
+id | The id of the user to be updated. | true
 
-### Query parameters (`GET` only)
+### Query parameters
 
 If you are using `GET`, the properties to be updated/added have to be passed in the query param named `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
-x | The properties to update/add as JSON string. | true
+x | The properties to updated/added. | true
 
 
 
@@ -424,16 +424,16 @@ x | The properties to update/add as JSON string. | true
 
 ## Delete a user
 
-The operation `/d/app/u` allows you to delete a user from an `app`.
+The operation `/d/<app>/u` allows you to delete a user from an `app`.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP Request
 
-`DELETE /d/app/u/userId`
+`DELETE /d/<app>/u/<id>`
 
-`GET /d/app/u/userId`
+`GET /d/<app>/u/<id>`
 
-Using both methods, it is just necessary to append the user id in the URL.
+Using both methods, it is just necessary to append the user `id` in the URL.
 
 > <a href="https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 </a>
 
@@ -450,7 +450,6 @@ app.delete('u/5fcbdeb1c5ef0493e50a2fc4')
 ```
 
 ```html
-
 ```
 
 ```shell
@@ -467,10 +466,10 @@ curl https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace `app` and `userId` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 u | The default user array. | true
-userId | The id of the user to be deleted. | true
+id | The id of the user to be deleted. | true

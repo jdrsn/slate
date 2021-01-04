@@ -29,6 +29,24 @@ An object follows JSON's structure and its properties (fields/columns) can conta
 An array corresponds to a collection of JavaScript objects that can contain another arrays of objects and so on.
 On qi.do, an array is automatically created if it does not exist.
 
+> Example of an array of 3 objects:
+
+```json
+{
+  "_id": "5fcbdc6dc5ef0493e50a2fc0",
+  "random": 123,
+  "stuff": [
+    {
+      "foo": true,
+      "text": "a test :)"
+    },
+    {
+      "foo": null
+    }
+  ]
+}
+```
+
 # Quick-Start
 
 The API can be used in any programming language via HTTP. However, there is a client library on `npm`.  

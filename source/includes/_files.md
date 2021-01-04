@@ -5,19 +5,18 @@ For every file in the request, an object in the `f` array is created.
 The data of the uploaded files are also stored in the newly created object of the requested array.
 That means it is possible to upload files onto no mather which array.
 
-
 ## Upload a file (create)
 
 The operation `/c` also allows you to upload files onto the requested app.
 A request can be sent through the HTTP methods `POST` and `PUT` (with operation `/u`).
 
-### HTTP Request
+### HTTP endpoints
 
-`POST /c/app/array`
+`POST /c/<app>/<array>`
 
-`PUT /u/app/array`
+`PUT /u/<app>/<array>`
 
-All files in the same request are uploaded to the specified `_path` in the request body.
+All files in the same request are uploaded to the `_path` specified in the request body.
 If a request does not contain `_path`, then all files are uploaded to a new automatically created user directory.
 
 ```typescript
@@ -86,7 +85,7 @@ curl https://qi.do/c/chat/message \
 
 ### URL parameters
 
-In the request URL, you must replace `app` and `array` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -101,14 +100,13 @@ array | The name of the array to be used. | true
 
 ## Read files
 
-The operation `/r/app/f` allows you to read files that are stored on the `app`.
-A request can be sent only via HTTP method `GET`.
+The operation `/r/<app>/f` allows you to read files that are stored on an app.
 
 ### Read all files
 
-`GET /r/app/f`
+`GET /r/<app>/f`
 
-Through the URLs ending with `/f`, all files on the `app` are retrieved.
+Through the URLs ending with `/f`, all files on the requested app are retrieved.
 
 > <a href="https://qi.do/r/chat/f" target="_blank">qi.do/r/chat/f </a>
 
@@ -141,11 +139,11 @@ curl https://qi.do/r/chat/f \
 
 ### Read specific files
 
-`GET /r/app/f?x=JSON_STRING&o=JSON_STRING`
+`GET /r/<app>/f?x=<JSON>&o=<JSON>`
 
 In order to retrieve specific files, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
-For more details about how to query files with `qi.do`, please refer to the
+For more details about how to query files with qi.do, please refer to the
 <a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
 documentation.
 
@@ -213,7 +211,7 @@ o | The query options object. | false
 
 ### Read a single file
 
-`GET /r/app/f/fileId`
+`GET /r/<app>/f/<id>`
 
 A single user can be retrieved by attaching its `id` to the request URL.
 
@@ -232,7 +230,6 @@ app.read('f/5fcbde89c5ef0493e50a2fc3')
 ```
 
 ```html
-
 ```
 
 ```shell
@@ -257,13 +254,13 @@ curl https://qi.do/r/chat/f/5fbf9947f54f0cdad0cf1387 \
 
 ### URL parameters
 
-In the request URL, you must replace `app` and `fileId` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 u | The default user array. | true
-fileId | The id of the file to be retrieved. | false
+id | The id of the file to be retrieved. | false
 
 
 
@@ -274,16 +271,16 @@ fileId | The id of the file to be retrieved. | false
 
 ## Delete a file
 
-The operation `/d/app/u` allows you to delete a file from an `app`.
+The operation `/d/<app>/u` allows you to delete a file from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
-### HTTP Request
+### HTTP endpoints
 
-`DELETE /d/app/u/fileId`
+`DELETE /d/<app>/u/<id>`
 
-`GET /d/app/u/fileId`
+`GET /d/<app>/u/<id>`
 
-Using both methods, it is just necessary to append the file id in the URL.
+Using both methods, it is just necessary to append the file `id` in the URL.
 
 > <a href="https://qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4 </a>
 
@@ -300,7 +297,6 @@ app.delete('f/5fcbdeb1c5ef0493e50a2fc4')
 ```
 
 ```html
-
 ```
 
 ```shell
@@ -317,10 +313,10 @@ curl https://qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace `app` and `fileId` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
 app | The name of the app to be used. | true
 f | The default file array. | true
-fileId | The id of the user to be deleted. | true
+id | The id of the file to be deleted. | true

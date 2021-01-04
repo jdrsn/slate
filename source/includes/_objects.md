@@ -1,36 +1,27 @@
 # Objects
 
-With `qi.do`, you have your own production-ready API to easily execute the four most common database operations (CRUD),
-also through authenticated users, even directly from your favorite browser's address bar.
-
-These operations are:
-
-`C` for `create`: `qi.do/c`
-`R` for `read`: `qi.do/r`
-`U` for `update`: `qi.do/u`
-`D` for `delete`: `qi.do/d`
-
-All URLs follow the format `qi.do/<operation>/<app>/<array>/<objectId>`.
-For create `/c` and update `/u` operations, you can whether pass a JSON object in the HTTP request body or a JSON
-string as a query param named "x" in the URL.
-With read `/r` operations, you can use URL query params for retrieving specific objects.
-`qi.do`'s authentication and storage services are also based on CRUD-like operations.
-See detailed examples in the next sections.
+On qi.do, an object is the main data structure from which all other structures (like users and files) are inherited.
+All kinds of objects on qi.do follow the JSON representation.
+An object in a qi.do array can be seen as document or entry in a database table or collection.
 
 ## Create an object
 
 The operation `/c` allows you to create an object (document/entry) in an array (collection/table).
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
-### HTTP request
+### HTTP endpoints
 
 `POST /c/<app>/<array>`
 
+`POST /c/<app>/<array>/<id>`
+
 Using `POST`, the data of the object to be created corresponds to the HTTP request body.
 
-`GET /c/<app>/<array>?x=JSON_STRING`
+`GET /c/<app>/<array>?x=<JSON>`
 
-If you are using `GET`, the object to be created needs to be passed as JSON string in the URL query param named `x`.
+`GET /c/<app>/<array>/<id>?x=<JSON>`
+
+Via `GET`, the object to be created needs to be passed as JSON string in the URL query param named `x`.
 
 > <a href='https://qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"}' target='_blank'>qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"} </a>
 
@@ -79,11 +70,12 @@ curl https://qi.do/c/chat/message \
 }
 ```
 
-You can also define an `id` for the object that you are creating by attaching it to the request URL, like `.../<array>/<id>`.
+<br/>
+The JSON-encoded response contains the `id` of the newly created object.
 
 ### URL parameters
 
-In the request URL, you must replace these parameters with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -91,11 +83,13 @@ app | The name of the app to be used. | true
 array | The name of the array to be used. | true
 id | The id of the object to be created. | false
 
-### Query parameters (`GET` only)
+### Query parameters
+
+If you are using `GET`, the object to be created has to be passed as JSON string in the query param named `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
-x | The object to create as JSON string. | true
+x | The object to be created. | true
 
 
 
@@ -106,13 +100,12 @@ x | The object to create as JSON string. | true
 ## Read objects
 
 The operation `/r` allows you to read objects (documents/entries) that are stored in a specific array (collection/table).
-A request can be sent only via HTTP method `GET`.
 
 ### Read all objects
 
 `GET /r/<app>/<array>`
 
-Through the URLs ending with `/<array>`, all objects in this array are retrieved.
+Through the endpoints ending with `/<array>`, all objects in this array are retrieved.
 
 > <a href="https://qi.do/r/chat/message" target="_blank">qi.do/r/chat/message </a>
 
@@ -140,16 +133,16 @@ curl https://qi.do/r/chat/message \
 > HTTP response:
 
 ```json
-[...] // all objects in array
+[...] // all objects in the array
 ```
 
 ### Read specific objects
 
-`GET /r/<app>/<array>?x=JSON_STRING&o=JSON_STRING`
+`GET /r/<app>/<array>?x=<JSON>&o=<JSON>`
 
 In order to retrieve specific objects, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
-For more details about how to query objects with `qi.do`, please refer to the
+For more details about how to query objects with qi.do, please refer to the
 <a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
 documentation.
 
@@ -257,7 +250,7 @@ curl https://qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3 \
 
 ### URL parameters
 
-In the request URL, you must replace `app`, `array` and `id` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -275,11 +268,15 @@ id | The id of the object to be retrieved. | false
 The operation `/u` allows you to update an object in an array.
 A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
 
-### HTTP Request
+### HTTP endpoints
 
 `PUT /u/<app>/<array>/<id>`
 
-Using `PUT`, the data of the object to be updated corresponds to the request body.
+Using `PUT`, the object data to be updated corresponds to the request body.
+
+`GET /u/<app>/<array>/<id>?x=<JSON>`
+
+Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
 
 > <a href='https://qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true} </a>
 
@@ -325,13 +322,9 @@ curl https://qi.do/u/chat/profile/5fcbdc57c5ef0493e50a2fbd \
 200
 ```
 
-`GET /u/<app>/<array>/<id>?x=JSON_STRING`
-
-Via `GET`, the data needs to be passed as a JSON string in the query param `x` of the URL.
-
 ### URL parameters
 
-In the request URL, you must replace `app`, `array` and `id` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -339,13 +332,13 @@ app | The name of the app to be used. | true
 array | The name of the array to be used. | true
 id | The id of the object to be updated. | true
 
-### Query parameters (`GET` only)
+### Query parameters
 
 If you are using `GET`, the properties to be updated/added have to be passed in the query param named `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
-x | The properties to update/add as JSON string. | true
+x | The properties to be updated/added. | true
 
 
 
@@ -358,8 +351,7 @@ x | The properties to update/add as JSON string. | true
 The operation `/d` allows you to delete an object from an array.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
-### HTTP Request
-
+### HTTP endpoints
 
 `DELETE /d/<app>/<array>/<id>`
 
@@ -399,7 +391,7 @@ curl https://qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace `app`, `array` and `id` with your respective data.
+In the request URL, you must replace the parameters below with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
