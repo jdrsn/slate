@@ -15,6 +15,7 @@ includes:
   - objects
   - users
   - files
+  - extras
   - errors
 
 search: true
@@ -28,17 +29,14 @@ qi.do offers a NoSQL, <a href="https://www.mongodb.com/document-databases" targe
 database solution which is represented by a set of arrays that store JSON objects.
 The database infrastructure runs on distributed instances of <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
 
-_MongoDB is a general purpose, document-based, distributed database built for modern application developers and for the
-cloud era._
+For many reasons, qi.do uses a simpler terminology. On qi.do, databases are called **apps**, collections are named **arrays**, and documents **objects**.
 
-Since qi.do unifies database with any programming language, we like to call collections **arrays** and documents **objects**.
-
-### Objects, documents, entries
+### Objects (documents, entries)
 
 On qi.do, an object (document/entry) follows JSON's structure and its properties (fields/columns) can contain values with type:
-`boolean`, `numerical`, `string`, `array`, `object` or `null`.
+`boolean`, `numerical`, `string`, `array`, `object` or `null`. You are able to add, retrieve, change and remove objects.
 
-### Arrays, collections, tables
+### Arrays (collections, tables)
 
 An array is a collection of JavaScript objects that can contain another arrays of objects and so on.
 If an array does not exist, it is automatically created.
@@ -73,9 +71,15 @@ If an array does not exist, it is automatically created.
 ]
 ```
 
+### Apps (databases)
+
+On qi.do, an app is a set of functions that rely on a database.
+Arrays with their objects always belong to an app.
+It takes only 30s to create an app via qi.do's console under <a href="https://c.qi.do" target="_blank">c.qi.do</a>.
+
 ### API reference
 
-qi.do is a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">REST</a> API.
+qi.do API is built on <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">REST</a>.
 It accepts JSON-encoded and form-encoded request bodies and returns JSON-encoded responses.
 Our API has resource-oriented endpoints and uses standard HTTP authentication and response codes.
 
@@ -95,31 +99,31 @@ Also, you can execute these operations through authenticated users and even dire
 
 The four main operations are:
 
-`/c` for `create`
-
 > <a href='https://qi.do/c/app/array?x={"prop":true}' target='_blank'>qi.do/c/app/array?x={"prop":true} </a>
 
-`/r` for `read`
+`/c` for `create`
 
 > <a href="https://qi.do/r/app/array" target="_blank">qi.do/r/app/array </a>
 
-`/u` for `update`
+`/r` for `read`
 
 > <a href='https://qi.do/u/app/array/id?x={"prop":false}' target='_blank'>qi.do/u/app/array/id?x={"prop":false} </a>
 
-`/d` for `delete`
+`/u` for `update`
 
 > <a href="https://qi.do/d/app/array/id" target="_blank">qi.do/d/app/array/id </a>
 
-The advanced operations are:
+`/d` for `delete`
 
-`/a` for `auth`
+The advanced endpoints are:
 
 > <a href='https://qi.do/a/app/user/pass' target='_blank'>qi.do/a/app/user/pass </a>
 
-`/x` for extra operations
+`/a` for `auth`
 
 > <a href='https://qi.do/x/app/p/b?x={"title":"push","body":"notification"}' target='_blank'>qi.do/x/app/p/b?x={"title":"push","body":"notification"} </a>
+
+`/x` for microservice operations
 
 Almost all HTTP endpoints follow the format:
 
@@ -139,7 +143,7 @@ You can also try qi.do out by clicking on the links that are shown on top of the
 
 ### Install, import, init
 
-You can install qi.do's client via `npm`:
+You can install qi.do's client via npm:
 
 `npm i @qido/client`
 
