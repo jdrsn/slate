@@ -31,12 +31,12 @@ The database infrastructure runs on distributed instances of <a href="https://ww
 
 For many reasons, qi.do uses a simpler terminology. On qi.do, databases are called **apps**, collections are named **arrays**, and documents **objects**.
 
-### Objects (documents, entries)
+**Objects**
 
 On qi.do, an object (document/entry) follows JSON's structure and its properties (fields/columns) can contain values with type:
 `boolean`, `numerical`, `string`, `array`, `object` or `null`. You are able to add, retrieve, change and remove objects.
 
-### Arrays (collections, tables)
+**Arrays**
 
 An array is a collection of JavaScript objects that can contain another arrays of objects and so on.
 If an array does not exist, it is automatically created.
@@ -71,10 +71,10 @@ If an array does not exist, it is automatically created.
 ]
 ```
 
-### Apps (databases)
+**Apps**
 
 On qi.do, an app is a set of functions that rely on a database.
-Arrays with their objects always belong to an app.
+Every array with their objects always belongs to an app.
 It takes only 30s to create an app via qi.do's console under <a href="https://c.qi.do" target="_blank">c.qi.do</a>.
 
 ### API reference
@@ -174,7 +174,7 @@ const app = new qido('test')
 const app = new qido('test')
 ```
 
-### Create a user
+### Create user
 
 If your app has authentication activated, then you have to create and authenticate a user before executing operations.
 
@@ -216,7 +216,7 @@ curl https://qi.do/c/chat/u \
 -H 'Content-Type: application/json'
 ```
 
-### Authenticate a user
+### Authenticate user
 
 If your app has authentication on, every request must be authorized through a `token`. Everytime a user logs in, its `token` is generated.
 
@@ -256,7 +256,7 @@ app.auth(login)
 curl https://qi.do/a/chat/dad@example.com/p455w0rd
 ```
 
-### Create an object
+### Create object
 
 The same `create` method for users also allows you to create any kind of JSON object. 
 The first parameter takes the name of the array.
@@ -303,7 +303,7 @@ curl https://qi.do/c/chat/message \
 -H 'Authorization: Bearer token'
 ```
 
-### Read objects
+### Read object
 
 The HTTP endpoint `/r/<app>/<array>` allows you to read objects that are stored in an array.
 In the node client library, the `read` method is used for that.
