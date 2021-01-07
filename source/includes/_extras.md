@@ -1,10 +1,43 @@
+# Permissions
+
+### User authentication disabled
+
+If your app has authentication disabled, then all objects in the app are public to anyone.
+That means, any person (or robot) who knows how qi.do API works would be able to create, read, update and even delete objects from your app.
+
+### Authentication via API key
+
+However, if you protect your app with API keys, nobody would be able to execute your app's microservices except for those you give API keys.
+That is very useful if third parties need access to your app.
+
+### User authentication enabled
+
+If your app has authentication enabled, every object automatically includes the user id that created that object.
+This only means that every user on the app has access to all objects of all other users.
+Not logged-in users do not have access to any data. 
+
+In order to make any object private, you can set the property `_p` as follow:
+
+Value | Permissions
+--------- | -----------
+<= 0 | Only own user can read/update/delete.
+>= 1 | Other users can read.
+>= 2 | Other users can read and update.
+undefined | Other users can read/update/delete.
+
+
+
+
+
+
+
 # Streams (real-time)
 
-With qi.do, you can handle multiple real-time databases even at the same time.
+With qi.do, you can handle multiple real-time databases even in the same application.
 For every array that you want to track changes, you must create a **stream** in the <a href="https://c.qi.do/streams" target="_blank">console</a>.
 
 If you already have a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" target="_blank">Service Worker</a> running on your app,
-you just need to `subscribe` to your `stream`.
+you just need to subscribe to your `stream`.
 
 ```typescript
 // stream every change in the array
@@ -18,7 +51,8 @@ app.stream('message', '5fef00ae58daeb0b0b23edcb')
   .subscribe(stream => console.log(stream))
 ```
 
-For more information, refer to MongoBD's change streams.
+<br/>
+Every time an object is created, updated or deleted, your app will instantly receive the information.
 
 
 
@@ -32,7 +66,7 @@ You can broadcast to any custom audience based on your subscriptions.
 
 ## Subscribe
 
-The operation `/p/<app>/s` allows you to create a push subscription object on an app.
+The microservice `/p/<app>/s` allows you to create a push subscription object on an app.
 This object can then be used to broadcast push notifications.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
@@ -108,7 +142,7 @@ x | The subscription to be created. | true
 
 ## Broadcast
 
-The operation `/p/<app>/b` allows you to broadcast push notifications to a specific audience on an app.
+The microservice `/p/<app>/b` allows you to broadcast push notifications to a specific audience on an app.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 You are able to broadcast push notifications to multiple users in a single request.
@@ -117,12 +151,17 @@ You are able to broadcast push notifications to multiple users in a single reque
 
 `POST /p/<app>/b`
 
+`POST /p/<app>/b?q=<JSON>`
+
 Using `POST`, the data of the notification to be created corresponds to the HTTP request body.
 
 `GET /p/<app>/b?x=<JSON>`
 
+`GET /p/<app>/b?x=<JSON>&q=<JSON>`
+
 Via `GET`, the notification to be broadcasted needs to be passed as JSON string in the URL query param `x`.
-If there is a custom audience, it should be passed in the query param `q`.
+
+If there is a custom audience, it should be passed in the query param `q` for both HTTP methods.
 
 > <a href='https://qi.do/p/test/b?x={"title":"dad","body":"dinner is ready :)"}&q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}}' target='_blank'>qi.do/p/test/b?x={"title":"dad","body":"dinner is ready :)"}&q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}} </a>
 
@@ -196,7 +235,7 @@ You can set up multiple SMTP configurations for every app.
 
 ## Send email messages
 
-The operation `/m/<app>` allows you to send email messages via SMTP.
+The microservice `/m/<app>` allows you to send email messages via SMTP.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 We recommend creating SMTP configurations in the console.

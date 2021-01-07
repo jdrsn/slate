@@ -1,13 +1,13 @@
 # Files
 
-It is possible to upload files onto any array.
+It is possible to upload files within an object onto any array.
 The uploaded files are referenced in the newly created object.
 Also, for every file in a request, an object is created in the `f` array of the requested app.
 
 ## Upload a file (create)
 
-The operation `/c` also allows you to upload files onto the requested app.
-A request can be sent through the HTTP methods `POST` and `PUT` (with operation `/u`).
+The microservice `/c` also allows you to upload files onto the requested app.
+A request can be sent through the HTTP methods `POST` and `PUT` (with microservice `/u`).
 
 ### HTTP endpoints
 
@@ -86,7 +86,7 @@ id | The id of the object to be created. | false
 
 ## Read files
 
-The operation `/r/<app>/f` allows you to read files that are stored on an app.
+The microservice `/r/<app>/f` allows you to read files that are stored on an app.
 
 ### Read all files
 
@@ -240,7 +240,7 @@ curl https://qi.do/r/test/f/5fbf9947f54f0cdad0cf1387 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below (excluding `f`) with your respective data.
+In the request URL, you must replace the parameters below (except `f`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -257,7 +257,7 @@ id | The id of the file to be retrieved. | false
 
 ## Delete a file
 
-The operation `/d/<app>/f` allows you to delete a file from an app.
+The microservice `/d/<app>/f` allows you to delete a file from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP endpoints
@@ -299,7 +299,7 @@ curl https://qi.do/d/test/f/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below (excluding `f`) with your respective data.
+In the request URL, you must replace the parameters below (except `f`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
