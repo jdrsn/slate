@@ -2,10 +2,11 @@
 
 A user object looks almost like any other object.
 The main difference is that the properties `u` (username or email) and `p` (password) are required for a user to log in.
+You are free to add any data to a `u` object.
 
 ## Create a user
 
-The operation `/c/<app>/u` allows you to create a user in the requested app.
+The microservice `/c/<app>/u` allows you to create a user in the requested app.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 ### HTTP endpoints
@@ -22,12 +23,12 @@ Via `GET`, username (or e-mail) and password can be passed directly as URL param
 
 For `GET` requests, the user data can also be passed as JSON string in the query param `x` of the URL.
 
-> <a href='https://qi.do/c/chat/u/dad@example.com/p455w0rd' target='_blank'>qi.do/c/chat/u/dad@example.com/p455w0rd </a>
+> <a href='https://qi.do/c/test/u/me@example.com/p455w0rd' target='_blank'>qi.do/c/test/u/me@example.com/p455w0rd </a>
 
 ```typescript
 // user to be created
 const user = {
-  u: 'dad@example.com',
+  u: 'me@example.com',
   p: 'p455w0rd',
 }
 // create a user on the app
@@ -47,14 +48,14 @@ app.create('u', user)
 
 ```html
 <form id="user">
-  <input type="text" name="u" value="dad@example.com">
+  <input type="text" name="u" value="me@example.com">
   <input type="text" name="p" value="p455w0rd">
 </form>
 ```
 
 ```shell
-curl https://qi.do/c/chat/u \
--d '{"u":"dad@example.com","p":"p455w0rd"}' \
+curl https://qi.do/c/test/u \
+-d '{"u":"me@example.com","p":"p455w0rd"}' \
 -H 'Content-Type: application/json'
 ```
 
@@ -69,12 +70,11 @@ curl https://qi.do/c/chat/u \
 <br/>
 The JSON-encoded response contains the `id` of the newly created user.
 A custom user id can be set directly in the request body as `_id`.
-You are free to add any data to a `u` object.
 The `p` property is encrypted and never shown in the results.
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
+In the request URL, you must replace the parameters below (except `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -85,7 +85,7 @@ pass | The password of the user to be created. | false
 
 ### Query parameters
 
-If you are using `GET`, the object to be created has to be passed as JSON string in the query param named `x`.
+If you are using `GET`, the object to be created has to be passed as JSON string in the query param `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -98,7 +98,7 @@ x | The user to be created. | true
 
 ## Authenticate a user
 
-The operation `/a` allows a user to authenticate with email (or username) and password. 
+The microservice `/a` allows a user to authenticate with email (or username) and password. 
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 ### HTTP endpoints
@@ -113,12 +113,12 @@ Using `POST`, user/email and password of the user to be authenticated correspond
 
 Via `GET`, the login data should be in the URL parameters.
 
-> <a href='https://qi.do/a/chat/dad@example.com/p455w0rd' target='_blank'>qi.do/a/chat/dad@example.com/p455w0rd </a>
+> <a href='https://qi.do/a/test/me@example.com/p455w0rd' target='_blank'>qi.do/a/test/me@example.com/p455w0rd </a>
 
 ```typescript
 // user data
 const login = {
-  u: 'dad@example.com',
+  u: 'me@example.com',
   p: 'p455w0rd',
   e: '7d'
 }
@@ -139,14 +139,14 @@ app.auth(login)
 
 ```html
 <form id="login">
-  <input type="text" name="u" value="dad@example.com">
+  <input type="text" name="u" value="me@example.com">
   <input type="text" name="p" value="p455w0rd">
   <input type="text" name="e" value="7d">
 </form>
 ```
 
 ```shell
-curl https://qi.do/a/chat/dad@example.com/p455w0rd/7d
+curl https://qi.do/a/test/me@example.com/p455w0rd/7d
 ```
 
 > HTTP Response:
@@ -159,7 +159,7 @@ curl https://qi.do/a/chat/dad@example.com/p455w0rd/7d
 
 <br/>
 If the user data matches, a JWT (JSON Web Token) is sent with the response.
-All the other operations can then be authorized with this token.
+All the other microservices can then be authorized with this token.
 
 ### URL parameters
 
@@ -180,7 +180,7 @@ expires | The time period until which the token should be valid, in the form `30
 
 ## Read users
 
-The operation `/r/<app>/u` allows you to read users that are registered on an app.
+The microservice `/r/<app>/u` allows you to read users that are registered on an app.
 
 ### Read all users
 
@@ -188,7 +188,7 @@ The operation `/r/<app>/u` allows you to read users that are registered on an ap
 
 Through the URLs ending with `/u`, all users on the requested app are retrieved.
 
-> <a href="https://qi.do/r/chat/u" target="_blank">qi.do/r/chat/u </a>
+> <a href="https://qi.do/r/test/u" target="_blank">qi.do/r/test/u </a>
 
 ```typescript
 // read all users on the app
@@ -207,7 +207,7 @@ app.read('u')
 ```
 
 ```shell
-curl https://qi.do/r/chat/u \
+curl https://qi.do/r/test/u \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -227,11 +227,11 @@ For more details about how to query users with qi.do, please refer to the
 <a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
 documentation.
 
-> <a href='https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3}' target='_blank'>qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} </a>
+> <a href='https://qi.do/r/test/u?x={"disabled":true}&o={"limit":3}' target='_blank'>qi.do/r/test/u?x={"disabled":true}&o={"limit":3} </a>
 
 ```typescript
 // read specific users
-const filter = {channel: 'kids'}
+const filter = {disabled: true}
 const options = {limit: 3}
 app.read('u', filter, options)
   .then(users => console.log(users))
@@ -249,7 +249,7 @@ app.read('u', filter, options)
 ```
 
 ```shell
-curl https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} \
+curl https://qi.do/r/test/u?x={"disabled":true}&o={"limit":3} \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -265,12 +265,12 @@ curl https://qi.do/r/chat/u?x={"disabled":true}&o={"limit":3} \
   },
   {
     "_id": "5fcbde89c5ef0493e50a2fc3",
-    "u": "tai",
+    "u": "joe",
     "disabled": true
   },
   {
     "_id": "5fcbde89c2ef0433e50a2fc7",
-    "u": "nai",
+    "u": "pam",
     "disabled": true
   }
 ]
@@ -291,7 +291,7 @@ o | The query options object. | false
 
 A single user can be retrieved by attaching its `id` to the request URL.
 
-> <a href="https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 </a>
+> <a href="https://qi.do/r/test/u/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/test/u/5fcbde89c5ef0493e50a2fc3 </a>
 
 ```typescript
 // read user by id
@@ -310,7 +310,7 @@ app.read('u/5fcbde89c5ef0493e50a2fc3')
 ```
 
 ```shell
-curl https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 \
+curl https://qi.do/r/test/u/5fcbde89c5ef0493e50a2fc3 \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -327,7 +327,7 @@ curl https://qi.do/r/chat/u/5fcbde89c5ef0493e50a2fc3 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
+In the request URL, you must replace the parameters below (except `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -343,7 +343,7 @@ id | The id of the user to be retrieved. | false
 
 ## Update a user
 
-The operation `/u/<app>/u` allows you to update a user on an app.
+The microservice `/u/<app>/u` allows you to update a user on an app.
 A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
 
 ### HTTP endpoints
@@ -356,7 +356,7 @@ Using `PUT`, the data of the user to be updated corresponds to the request body.
 
 Via `GET`, the data needs to be passed as JSON string in the query param `x` of the URL.
 
-> <a href='https://qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/u?x={"mood":"endless boredom","disturb":true} </a>
+> <a href='https://qi.do/u/test/u?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/test/u?x={"mood":"endless boredom","disturb":true} </a>
 
 ```typescript
 // properties to be updated/added
@@ -387,7 +387,7 @@ app.update('u/5fcbdc57c5ef0493e50a2fbd', user)
 ```
 
 ```shell
-curl https://qi.do/u/chat/u/5fcbdc57c5ef0493e50a2fbd \
+curl https://qi.do/u/test/u/5fcbdc57c5ef0493e50a2fbd \
 --request PUT \
 --data '{"mood":"endless boredom","disturb":true}' \
 -H 'Content-Type: application/json' \
@@ -402,7 +402,7 @@ curl https://qi.do/u/chat/u/5fcbdc57c5ef0493e50a2fbd \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
+In the request URL, you must replace the parameters below (except `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -412,7 +412,7 @@ id | The id of the user to be updated. | true
 
 ### Query parameters
 
-If you are using `GET`, the properties to be updated/added have to be passed in the query param named `x`.
+If you are using `GET`, the properties to be updated/added have to be passed in the query param `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -426,7 +426,7 @@ x | The properties to updated/added. | true
 
 ## Delete a user
 
-The operation `/d/<app>/u` allows you to delete a user from an app.
+The microservice `/d/<app>/u` allows you to delete a user from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP Request
@@ -437,7 +437,7 @@ A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 Using both methods, it is just necessary to append the user `id` in the URL.
 
-> <a href="https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 </a>
+> <a href="https://qi.do/d/test/u/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/test/u/5fcbdeb1c5ef0493e50a2fc4 </a>
 
 ```typescript
 // delete user by id
@@ -455,7 +455,7 @@ app.delete('u/5fcbdeb1c5ef0493e50a2fc4')
 ```
 
 ```shell
-curl https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 \
+curl https://qi.do/d/test/u/5fcbdeb1c5ef0493e50a2fc4 \
 --request DELETE \
 -H 'Authorization: Bearer token'
 ```
@@ -468,7 +468,7 @@ curl https://qi.do/d/chat/u/5fcbdeb1c5ef0493e50a2fc4 \
 
 ### URL parameters
 
-In the request URL, you must replace the parameters below (excluding `u`) with your respective data.
+In the request URL, you must replace the parameters below (except `u`) with your respective data.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------

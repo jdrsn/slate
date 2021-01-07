@@ -1,12 +1,12 @@
 # Objects
 
-On qi.do, an object is the main data structure from which all other structures (like users and files) are inherited.
+On qi.do, an object is the main data structure from which all other structures (such as users and files) are inherited.
 All kinds of objects on qi.do follow the JSON representation.
 An object in a qi.do array can be seen as document or entry in a database table or collection.
 
 ## Create an object
 
-The operation `/c` allows you to create an object (document/entry) in an array (collection/table).
+The microservice `/c` allows you to create an object (document/entry) in an array (collection/table).
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 ### HTTP endpoints
@@ -21,43 +21,43 @@ Using `POST`, the data of the object to be created corresponds to the HTTP reque
 
 `GET /c/<app>/<array>/<id>?x=<JSON>`
 
-Via `GET`, the object to be created needs to be passed as JSON string in the URL query param named `x`.
+Via `GET`, the object to be created needs to be passed as JSON string in the URL query param `x`.
 
-> <a href='https://qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"}' target='_blank'>qi.do/c/chat/message?x={"user":"dad","channel":"kids","text":"dinner is ready :)"} </a>
+> <a href='https://qi.do/c/test/order?x={"items":[3,5,8],"total":47.3,"comment":"deliver at door"}' target='_blank'>qi.do/c/test/order?x={"items":[3,5,8],"total":47.3,"comment":"deliver at door"} </a>
 
 ```typescript
 // object to be created
-const message = {
-  user: 'dad',
-  channel: 'kids',
-  text: 'dinner is ready :)'
+const order = {
+  items: [3, 5, 8],
+  total: 47.3,
+  comment: 'deliver at door'
 }
 // create object and log response
-app.create('message', message)
+app.create('order', order)
   .then(data => console.log(data))
 ```
 
 ```javascript
 // get your form element
-const form = document.getElementById('message')
+const form = document.getElementById('order')
 // convert to form data
-const message = new FormData(form)
-// create message along with all files
-app.create('message', message)
+const order = new FormData(form)
+// create order along with all files
+app.create('order', order)
   .then(data => console.log(data))
 ```
 
 ```html
-<form id="message">
-  <input type="text" name="user" value="dad">
-  <input type="text" name="channel" value="kids">
-  <input type="text" name="text" value="dinner is ready :)">
+<form id="order">
+  <input type="text" name="items" placeholder="items">
+  <input type="text" name="total" value="47.3">
+  <input type="text" name="comment" value="deliver at door">
 </form>
 ```
 
 ```shell
-curl https://qi.do/c/chat/message \
--d '{"user":"dad","channel":"kids","text":"dinner is ready :)"}' \
+curl https://qi.do/c/test/order \
+-d '{"items":[3,5,8],"total":47.3,"comment":"deliver at door"}' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -85,7 +85,7 @@ id | The id of the object to be created. | false
 
 ### Query parameters
 
-If you are using `GET`, the object to be created has to be passed as JSON string in the query param named `x`.
+If you are using `GET`, the object to be created has to be passed as JSON string in the query param `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -99,7 +99,7 @@ x | The object to be created. | true
 
 ## Read objects
 
-The operation `/r` allows you to read objects (documents/entries) that are stored in a specific array (collection/table).
+The microservice `/r` allows you to read objects (documents/entries) that are stored in a specific array (collection/table).
 
 ### Read all objects
 
@@ -107,17 +107,17 @@ The operation `/r` allows you to read objects (documents/entries) that are store
 
 Through the endpoints ending with `<array>`, all objects in this array are retrieved.
 
-> <a href="https://qi.do/r/chat/message" target="_blank">qi.do/r/chat/message </a>
+> <a href="https://qi.do/r/test/order" target="_blank">qi.do/r/test/order </a>
 
 ```typescript
-// read all objects from message array
-app.read('message')
+// read all objects from order array
+app.read('order')
   .then(data => console.log(data))
 ```
 
 ```javascript
-// read all objects from message array
-app.read('message')
+// read all objects from order array
+app.read('order')
   .then(data => console.log(data))
 ```
 
@@ -126,7 +126,7 @@ app.read('message')
 ```
 
 ```shell
-curl https://qi.do/r/chat/message \
+curl https://qi.do/r/test/order \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -146,21 +146,21 @@ For more details about how to query objects with qi.do, please refer to the
 <a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
 documentation.
 
-> <a href='https://qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3}' target='_blank'>qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3} </a>
+> <a href='https://qi.do/r/test/order?x={"total":{"$gte":20}}&o={"limit":3}' target='_blank'>qi.do/r/test/order?x={"total":{"$gte":20}}&o={"limit":3} </a>
 
 ```typescript
-// read specific objects from message array
-const filter = {channel: 'kids'}
+// read specific objects from order array
+const filter = {total: {$gte: 20}}
 const options = {limit: 3}
-app.read('message', filter, options)
+app.read('order', filter, options)
   .then(data => console.log(data))
 ```
 
 ```javascript
-// read specific objects from message array
-const filter = {channel: 'kids'}
+// read specific objects from order array
+const filter = {total: {$gte: 20}}
 const options = {limit: 3}
-app.read('message', filter, options)
+app.read('order', filter, options)
   .then(data => console.log(data))
 ```
 
@@ -168,7 +168,7 @@ app.read('message', filter, options)
 ```
 
 ```shell
-curl https://qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3} \
+curl https://qi.do/r/test/order?x={"total":{"$gte":20}}&o={"limit":3} \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -179,21 +179,20 @@ curl https://qi.do/r/chat/message?x={"channel":"kids"}&o={"limit":3} \
 [
   {
     "_id": "5feca140530c0772b232d3e5",
-    "user": "dad",
-    "channel": "kids",
-    "text": "dinner is ready :)"
+    "items": [3, 5, 8],
+    "total": 47.3,
+    "comment": "deliver at door"
   },
   {
     "_id": "5fcbde89c5ef0493e50a2fc3",
-    "user": "jay",
-    "channel": "kids",
-    "text": "morning <0/"
+    "items": [4, 6],
+    "total": 23.5,
+    "comment": "without peperoni"
   },
   {
     "_id": "5fcbdc6dc5ef0493e50a2fc0",
-    "user": "mia",
-    "channel": "kids",
-    "text": "i'm coming"
+    "items": [4, 9],
+    "total": 19.2
   }
 ]
 ```
@@ -213,17 +212,17 @@ o | The query options object. | false
 
 A single object can be retrieved by attaching its `id` to the request URL.
 
-> <a href="https://qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3 </a>
+> <a href="https://qi.do/r/test/order/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/test/order/5fcbde89c5ef0493e50a2fc3 </a>
 
 ```typescript
 // read object by id
-app.read('message/5fcbde89c5ef0493e50a2fc3')
+app.read('order/5fcbde89c5ef0493e50a2fc3')
   .then(data => console.log(data))
 ```
 
 ```javascript
 // read object by id
-app.read('message/5fcbde89c5ef0493e50a2fc3')
+app.read('order/5fcbde89c5ef0493e50a2fc3')
   .then(data => console.log(data))
 ```
 
@@ -232,7 +231,7 @@ app.read('message/5fcbde89c5ef0493e50a2fc3')
 ```
 
 ```shell
-curl https://qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3 \
+curl https://qi.do/r/test/order/5fcbde89c5ef0493e50a2fc3 \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -242,9 +241,9 @@ curl https://qi.do/r/chat/message/5fcbde89c5ef0493e50a2fc3 \
 ```json
 {
   "_id": "5fcbde89c5ef0493e50a2fc3",
-  "user": "jay",
-  "channel": "kids",
-  "text": "morning <0/"
+  "items": [4, 6],
+  "total": 23.5,
+  "comment": "without peperoni"
 }
 ```
 
@@ -265,7 +264,7 @@ id | The id of the object to be retrieved. | false
 
 ## Update an object
 
-The operation `/u` allows you to update an object in an array.
+The microservice `/u` allows you to update an object in an array.
 A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
 
 ### HTTP endpoints
@@ -278,40 +277,40 @@ Using `PUT`, the object data to be updated corresponds to the request body.
 
 Via `GET`, the data needs to be passed as JSON string in the query param `x` of the URL.
 
-> <a href='https://qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true}' target='_blank'>qi.do/u/chat/user?x={"mood":"endless boredom","disturb":true} </a>
+> <a href='https://qi.do/u/test/order?x={"total":45,"paid":true}' target='_blank'>qi.do/u/test/order?x={"total":45,"paid":true} </a>
 
 ```typescript
 // properties to be updated/added
-const profile = {
-  mood: 'endless boredom',
-  disturb: true
+const order = {
+  total: 45,
+  paid: true
 }
 // update object by id
-app.update('profile/5fcbdc57c5ef0493e50a2fbd', profile)
+app.update('order/5fcbdc57c5ef0493e50a2fbd', order)
   .then(data => console.log(data))
 ```
 
 ```javascript
 // get your form element
-const form = document.getElementById('profile')
+const form = document.getElementById('order')
 // convert to form data
-const profile = new FormData(form)
+const order = new FormData(form)
 // update profile
-app.update('profile/5fcbdc57c5ef0493e50a2fbd', profile)
+app.update('order/5fcbdc57c5ef0493e50a2fbd', order)
   .then(res => console.log(res))
 ```
 
 ```html
-<form id="profile">
-  <input type="text" name="mood" value="endless boredom">
-  <input type="checkbox" name="disturb" checked>
+<form id="order">
+  <input type="text" name="total" value="45">
+  <input type="checkbox" name="paid" checked>
 </form>
 ```
 
 ```shell
-curl https://qi.do/u/chat/profile/5fcbdc57c5ef0493e50a2fbd \
+curl https://qi.do/u/test/order/5fcbdc57c5ef0493e50a2fbd \
 --request PUT \
---data '{"mood":"endless boredom","disturb":true}' \
+--data '{"total":45,"paid":true}' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -334,7 +333,7 @@ id | The id of the object to be updated. | true
 
 ### Query parameters
 
-If you are using `GET`, the properties to be updated/added have to be passed in the query param named `x`.
+If you are using `GET`, the properties to be updated/added have to be passed in the query param `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -348,7 +347,7 @@ x | The properties to be updated/added. | true
 
 ## Delete an object
 
-The operation `/d` allows you to delete an object from an array.
+The microservice `/d` allows you to delete an object from an array.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP endpoints
@@ -359,17 +358,17 @@ A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 Using both methods, it is just necessary to append the object id in the URL.
 
-> <a href="https://qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4 </a>
+> <a href="https://qi.do/d/test/order/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/test/order/5fcbdeb1c5ef0493e50a2fc4 </a>
 
 ```typescript
 // delete object by id
-app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
+app.delete('order/5fcbdeb1c5ef0493e50a2fc4')
   .then(data => console.log(data))
 ```
 
 ```javascript
 // delete object by id
-app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
+app.delete('order/5fcbdeb1c5ef0493e50a2fc4')
   .then(data => console.log(data))
 ```
 
@@ -378,7 +377,7 @@ app.delete('message/5fcbdeb1c5ef0493e50a2fc4')
 ```
 
 ```shell
-curl https://qi.do/d/chat/message/5fcbdeb1c5ef0493e50a2fc4 \
+curl https://qi.do/d/test/order/5fcbdeb1c5ef0493e50a2fc4 \
 --request DELETE \
 -H 'Authorization: Bearer token'
 ```

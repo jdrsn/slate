@@ -15,8 +15,8 @@ A request can be sent through the HTTP methods `POST` and `PUT` (with operation 
 
 `PUT /u/<app>/<array>`
 
-All files in the same request are uploaded to the `_path` specified in the request body.
-If a request does not contain `_path`, then all files are uploaded to a new automatically created user directory.
+All files in the same request are uploaded to the `path` specified in the request body.
+If a request does not contain `path`, then all files are uploaded to a new automatically created user directory.
 
 ```typescript
 // get your form element
@@ -48,7 +48,7 @@ app.create('message', message)
 ```
 
 ```shell
-curl https://qi.do/c/chat/message \
+curl https://qi.do/c/test/message \
 -F 'attachments=@path/to/file.jpg' \
 -F 'user="dad"' \
 -F 'channel="family"' \
@@ -94,7 +94,7 @@ The operation `/r/<app>/f` allows you to read files that are stored on an app.
 
 Through the URLs ending with `/f`, all files on the requested app are retrieved.
 
-> <a href="https://qi.do/r/chat/f" target="_blank">qi.do/r/chat/f </a>
+> <a href="https://qi.do/r/test/f" target="_blank">qi.do/r/test/f </a>
 
 ```typescript
 // read all files on the app
@@ -113,7 +113,7 @@ app.read('f')
 ```
 
 ```shell
-curl https://qi.do/r/chat/f \
+curl https://qi.do/r/test/f \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -133,11 +133,11 @@ For more details about how to query files with qi.do, please refer to the
 <a href="https://mongodb.github.io/node-mongodb-native/markdown-docs/queries.html#query-object" target="_blank">MongoDB</a>
 documentation.
 
-> <a href='https://qi.do/r/chat/f?x={"_path":"cutom/path"}&o={"limit":2}' target='_blank'>qi.do/r/chat/f?x={"_path":"cutom/path"}&o={"limit":2} </a>
+> <a href='https://qi.do/r/test/f?x={"path":"cutom/path"}&o={"limit":2}' target='_blank'>qi.do/r/test/f?x={"path":"cutom/path"}&o={"limit":2} </a>
 
 ```typescript
 // read specific files on the app
-const filter = {_path: 'cutom/path'}
+const filter = {path: 'cutom/path'}
 const options = {limit: 2}
 app.read('f', filter, options)
   .then(files => console.log(files))
@@ -156,7 +156,7 @@ app.read('f', filter, options)
 ```
 
 ```shell
-curl https://qi.do/r/chat/f?x={"_path":"custom/path"}&o={"limit":2} \
+curl https://qi.do/r/test/f?x={"path":"custom/path"}&o={"limit":2} \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -167,7 +167,7 @@ curl https://qi.do/r/chat/f?x={"_path":"custom/path"}&o={"limit":2} \
 [
   {
     "_id": "5fbf9947f54f0cdad0cf1387",
-    "_path": "custom/path",
+    "path": "custom/path",
     "name": "angry-cat.png",
     "url": "https://f.qi.do...",
     "prop": "attachments",
@@ -176,7 +176,7 @@ curl https://qi.do/r/chat/f?x={"_path":"custom/path"}&o={"limit":2} \
   },
   {
     "_id": "5fbf9947f54f0cdad0cf1388",
-    "_path": "custom/path",
+    "path": "custom/path",
     "name": "farm-bot.pdf",
     "url": "https://f.qi.do...",
     "prop": "attachments",
@@ -201,7 +201,7 @@ o | The query options object. | false
 
 A single user can be retrieved by attaching its `id` to the request URL.
 
-> <a href="https://qi.do/r/chat/f/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/chat/f/5fcbde89c5ef0493e50a2fc3 </a>
+> <a href="https://qi.do/r/test/f/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/test/f/5fcbde89c5ef0493e50a2fc3 </a>
 
 ```typescript
 // read file by id
@@ -219,7 +219,7 @@ app.read('f/5fcbde89c5ef0493e50a2fc3')
 ```
 
 ```shell
-curl https://qi.do/r/chat/f/5fbf9947f54f0cdad0cf1387 \
+curl https://qi.do/r/test/f/5fbf9947f54f0cdad0cf1387 \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -229,7 +229,7 @@ curl https://qi.do/r/chat/f/5fbf9947f54f0cdad0cf1387 \
 ```json
 {
   "_id": "5fbf9947f54f0cdad0cf1387",
-  "_path": "custom/path",
+  "path": "custom/path",
   "name": "angry-cat.png",
   "url": "https://f.qi.do...",
   "prop": "attachments",
@@ -268,7 +268,7 @@ A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 Using both methods, it is just necessary to append the file `id` in the URL.
 
-> <a href="https://qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4 </a>
+> <a href="https://qi.do/d/test/f/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/test/f/5fcbdeb1c5ef0493e50a2fc4 </a>
 
 ```typescript
 // delete file by id
@@ -286,7 +286,7 @@ app.delete('f/5fcbdeb1c5ef0493e50a2fc4')
 ```
 
 ```shell
-curl https://qi.do/d/chat/f/5fcbdeb1c5ef0493e50a2fc4 \
+curl https://qi.do/d/test/f/5fcbdeb1c5ef0493e50a2fc4 \
 --request DELETE \
 -H 'Authorization: Bearer token'
 ```

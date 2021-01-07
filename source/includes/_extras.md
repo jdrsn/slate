@@ -1,9 +1,10 @@
 # Streams (real-time)
 
-You can have multiple fully real-time databases with qi.do.
+With qi.do, you can handle multiple real-time databases even at the same time.
 For every array that you want to track changes, you must create a **stream** in the <a href="https://c.qi.do/streams" target="_blank">console</a>.
 
-If you already have a service worker setup up and running on your app, you just need to `subscribe` to your `stream`.
+If you already have a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" target="_blank">Service Worker</a> running on your app,
+you just need to `subscribe` to your `stream`.
 
 ```typescript
 // stream every change in the array
@@ -35,8 +36,10 @@ The operation `/p/<app>/s` allows you to create a push subscription object on an
 This object can then be used to broadcast push notifications.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
-In order to be able to request a user to allow push notifications, you need your public **vapid** key, which can be found on the console in your app security settings.
-More information about how to permission request for push notifications can be found here.
+In order to be able to request a user to allow push notifications, you need your public **vapid** key.
+This key can be found on the console in your app security settings.
+
+More information about how to request permission for push notifications can be found <a href="https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API" target="_blank">here</a>.
 
 ### HTTP endpoints
 
@@ -46,9 +49,9 @@ Using `POST`, the data of the subscription to be created corresponds to the HTTP
 
 `GET /p/<app>/s?x=<JSON>`
 
-Via `GET`, the subscription to be created needs to be passed as JSON string in the URL query param named `x`.
+Via `GET`, the subscription to be created needs to be passed as JSON string in the URL query param `x`.
 
-> <a href='https://qi.do/p/chat/s?x={"endpoint":"https://url...","keys":{"auth":"key","p256dh":"key"},"channel":"kids"}' target='_blank'>qi.do/p/chat/s?x={"endpoint":"https://url...","keys":{"auth":"key","p256dh":"key"},"channel":"kids"} </a>
+> <a href='https://qi.do/p/test/s?x={"endpoint":"https://url...","keys":{"auth":"key","p256dh":"key"},"channel":"kids"}' target='_blank'>qi.do/p/test/s?x={"endpoint":"https://url...","keys":{"auth":"key","p256dh":"key"},"channel":"kids"} </a>
 
 ```typescript
 // the subscription object
@@ -75,7 +78,7 @@ app.subscribe(subscription)
 ```
 
 ```shell
-curl https://qi.do/p/chat/s \
+curl https://qi.do/p/test/s \
 -d '{"endpoint":"https://url...","keys":{"auth":"key","p256dh":"key"},"channel":"kids"}' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
@@ -92,7 +95,7 @@ s | The subscribe function. | true
 
 ### Query parameters
 
-If you are using `GET`, the subscription to be created has to be passed as JSON string in the query param named `x`.
+If you are using `GET`, the subscription to be created has to be passed as JSON string in the query param `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -118,10 +121,10 @@ Using `POST`, the data of the notification to be created corresponds to the HTTP
 
 `GET /p/<app>/b?x=<JSON>`
 
-Via `GET`, the notification to be broadcasted needs to be passed as JSON string in the URL query param named `x`.
+Via `GET`, the notification to be broadcasted needs to be passed as JSON string in the URL query param `x`.
 If there is a custom audience, it should be passed in the query param `q`.
 
-> <a href='https://qi.do/p/chat/b?x={"title":"dad","body":"dinner is ready :)"}&q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}}' target='_blank'>qi.do/p/chat/b?x={"title":"dad","body":"dinner is ready :)"}&q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}} </a>
+> <a href='https://qi.do/p/test/b?x={"title":"dad","body":"dinner is ready :)"}&q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}}' target='_blank'>qi.do/p/test/b?x={"title":"dad","body":"dinner is ready :)"}&q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}} </a>
 
 ```typescript
 // the notifcation object
@@ -156,7 +159,7 @@ app.broadcast(notifcation, audience)
 ```
 
 ```shell
-curl https://qi.do/c/chat/p/b?q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}} \
+curl https://qi.do/c/test/p/b?q={"channel":"kids","_uid":{"$ne":"5feca140530c0772b232d3e5"}} \
 -d '{"title":"dad","body":"dinner is ready :)"}' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
@@ -173,7 +176,7 @@ b | The broadcast function. | true
 
 ### Query parameters
 
-If you are using `GET`, the notification to be broadcasted has to be passed as JSON string in the query param named `x`.
+If you are using `GET`, the notification to be broadcasted has to be passed as JSON string in the query param `x`.
 
 Parameter | Description | Required
 --------- | ----------- |  -----------
@@ -186,6 +189,10 @@ q | The audience of the broadcast. | false
 
 
 # Mailer
+
+It is also possible to send emails via qi.do.
+However, our microservice for mail delivery is limited to SMTP only.
+You can set up multiple SMTP configurations for every app.
 
 ## Send email messages
 
@@ -209,18 +216,18 @@ Using `POST`, the data of the email message to be sent corresponds to the HTTP r
 
 `GET /m/<app>?x=<JSON>&q=<JSON>`
 
-Via `GET`, the message to be sent needs to be passed as JSON string in the URL query param named `x`.
+Via `GET`, the message to be sent needs to be passed as JSON string in the URL query param `x`.
 
-If you want to send through a custom SMTP config on the fly, it needs to be passed to the query param `q` in both HTTP methods.
+If you want to send through a custom SMTP config on the fly, in both HTTP methods it needs to be passed to the query param `q`.
 
-> <a href='https://qi.do/m/chat/5feca140530c0772b232d3e5?x={"to":"kids@example.com","sub":"dinner invitation","msg":"come downstairs now!"}' target='_blank'>qi.do/m/chat/5feca140530c0772b232d3e5?x={"to":"kids@example.com","sub":"dinner invitation","msg":"come downstairs now!"} </a>
+> <a href='https://qi.do/m/test/5feca140530c0772b232d3e5?x={"to":"kids@example.com","sub":"dinner invitation","msg":"prepare to get fat"}' target='_blank'>qi.do/m/test/5feca140530c0772b232d3e5?x={"to":"kids@example.com","sub":"dinner invitation","msg":"prepare to get fat"} </a>
 
 ```typescript
 // the notifcation object
 const message = {
   to: 'kids@example.com',
   sub: 'dinner invitation',
-  msg: '<p>come downstairs now!</p>'
+  msg: '<p>prepare to get fat</p>'
 }
 // a custom config (not recommended)
 let config = {
@@ -242,7 +249,7 @@ app.mail(message, config)
 const message = {
   to: 'kids@example.com',
   sub: 'dinner invitation',
-  msg: '<p>come downstairs now!</p>'
+  msg: '<p>prepare to get fat</p>'
 }
 // a custom config (not recommended)
 let config = {
@@ -260,8 +267,8 @@ app.mail(message, config)
 ```
 
 ```shell
-curl https://qi.do/m/chat/5feca140530c0772b232d3e5 \
--d '{"to":"kids@example.com","sub":"dinner invitation","msg":"<p>come downstairs now!</p>"' \
+curl https://qi.do/m/test/5feca140530c0772b232d3e5 \
+-d '{"to":"kids@example.com","sub":"dinner invitation","msg":"<p>prepare to get fat</p>"' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer token'
 ```
@@ -277,7 +284,7 @@ id | The id of the SMTP configuration. | false
 
 ### Query parameters
 
-If you are using `GET`, the email message to be sent has to be passed as JSON string in the query param named `x`.
+If you are using `GET`, the email message to be sent has to be passed as JSON string in the query param `x`.
 The configuration param `q` can be set ẁith `POST` and `GET`.
 
 Parameter | Description | Required
