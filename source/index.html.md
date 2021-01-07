@@ -1,5 +1,5 @@
 ---
-title: API Reference
+title: API reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - typescript
@@ -111,6 +111,7 @@ If an array does not exist, it is automatically created.
   }
 ]
 ```
+<br/>
 
 **Apps**
 
@@ -240,6 +241,7 @@ const app = new qido('test')
 const app = new qido('test')
 ```
 
+<br/>
 If your app is secured by API keys, just pass a `key` as second parameter in the initialization.
 
 ```typescript

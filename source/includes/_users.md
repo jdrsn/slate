@@ -10,7 +10,7 @@ The main difference is that the properties `u` (username or email) and `p` (pass
   "_id": "5feca140530c0772b232d3e5",
   "u": "me@example.com",
   "p": "p455w0rd",
-  "mood": "lockdown suicidal",
+  "bio": "lockdown survivor",
   "disturb": true
 }
 ```
@@ -443,7 +443,7 @@ x | The properties to updated/added. | true
 The microservice `/d/<app>/u` allows you to delete a user from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
-### HTTP Request
+### HTTP endpoints
 
 `DELETE /d/<app>/u/<id>`
 
