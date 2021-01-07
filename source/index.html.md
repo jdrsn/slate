@@ -8,8 +8,8 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - shell
 
 toc_footers:
-  - https://qi.do (base url)
   - <a href='https://c.qi.do' target='_blank'>> console</a>
+  - https://qi.do (base url)
 
 includes:
   - objects
@@ -47,7 +47,7 @@ array | A collection or table of objects.
 app | A database that stores arrays.
 microservice | A function that processes apps, arrays or objects.
 
-### Objects
+**Objects**
 
 On qi.do, an object follows JSON's structure and its properties (fields/columns) can store values of type:
 `boolean`, `numerical`, `string`, `array`, `object` or `null`.
@@ -76,7 +76,7 @@ On qi.do, an object follows JSON's structure and its properties (fields/columns)
 <br/>
 You are able to add, retrieve, change and remove objects.
 
-### Arrays
+**Arrays**
 
 An array is a collection of JavaScript objects.
 Objects can also store another arrays of objects and so on.
@@ -112,13 +112,13 @@ If an array does not exist, it is automatically created.
 ]
 ```
 
-### Apps
+**Apps**
 
 An app is an instance of qi.do.
 In a nutshell, an app is a database with a set of built-in microservices.
 Apps need to be created via qi.do console under <a href="https://c.qi.do" target="_blank">c.qi.do</a>.
 
-### Microservices
+**Microservices**
 
 A microservice executes a specific task always on a given app.
 In this API reference, you can find all available microservices that you can use in your apps.

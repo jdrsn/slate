@@ -2,6 +2,20 @@
 
 A user object looks almost like any other object.
 The main difference is that the properties `u` (username or email) and `p` (password) are required for a user to log in.
+
+> Example of a user object:
+
+```json
+{
+  "_id": "5feca140530c0772b232d3e5",
+  "u": "me@example.com",
+  "p": "p455w0rd",
+  "mood": "lockdown suicidal",
+  "disturb": true
+}
+```
+
+<br/>
 You are free to add any data to a `u` object.
 
 ## Create a user

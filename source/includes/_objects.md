@@ -4,6 +4,20 @@ On qi.do, an object is the main data structure from which all other structures (
 All kinds of objects on qi.do follow the JSON representation.
 An object in a qi.do array can be seen as document or entry in a database table or collection.
 
+> An arbitrary object:
+
+```json
+{
+  "_id": "5feca140530c0772b232d3e5",
+  "items": [3, 5, 8],
+  "total": 47.3,
+  "comment": "deliver at door"
+}
+```
+
+<br/>
+Any object can have any properties you wish. You are free to implement your own data interfaces even directly from your frontend application.
+
 ## Create an object
 
 The microservice `/c` allows you to create an object (document/entry) in an array (collection/table).

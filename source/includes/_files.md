@@ -4,6 +4,66 @@ It is possible to upload files within an object onto any array.
 The uploaded files are referenced in the newly created object.
 Also, for every file in a request, an object is created in the `f` array of the requested app.
 
+> An arbitrary object before file upload:
+
+```json
+{
+  "user": "dad",
+  "channel": "family",
+  "message": "everything is possible",
+  "attachments": [], // from input type file
+  "path": "custom/path" // the upload path
+}
+```
+
+> The main object after file upload:
+
+```json
+{
+  "_id": "5feca140530c0772b232d3e5",
+  "user": "dad",
+  "channel": "family",
+  "message": "everything is possible",
+  "_f": [ // all uploaded files
+    {
+      "_id": "5fcbdc6dc5ef0493e50a2fc0",
+      "name": "angry-cat.jpg",
+      "url": "https://f.qi.do/...",
+      "prop": "attachments"
+    },
+    {
+      "_id": "5fcbde89c5ef0493e50a2fc3",
+      "name": "farm-bot.pdf",
+      "url": "https://f.qi.do/...",
+      "prop": "attachments"
+    }
+  ]
+}
+```
+
+> The file objects created in the `f` array:
+
+```json
+[
+  {
+    "_id": "5fbf9947f54f0cdad0cf1387",
+    "path": "custom/path",
+    "name": "angry-cat.png",
+    "url": "https://f.qi.do...",
+    "prop": "attachments",
+    "array": "message"
+  },
+  {
+    "_id": "5fbf9947f54f0cdad0cf1388",
+    "path": "custom/path",
+    "name": "farm-bot.pdf",
+    "url": "https://f.qi.do...",
+    "prop": "attachments",
+    "array": "message"
+  }
+]
+```
+
 ## Upload a file (create)
 
 The microservice `/c` also allows you to upload files onto the requested app.
@@ -40,9 +100,9 @@ app.create('message', message)
 
 ```html
 <form id="message">
-  <input type="text" name="user">
-  <input type="text" name="channel">
-  <input type="text" name="text">
+  <input type="text" name="user" value="dad">
+  <input type="text" name="channel" value="family">
+  <input type="text" name="text" value="everything is possible">
   <input type="file" name="attachments" multiple>
 </form>
 ```
