@@ -7,8 +7,8 @@ That means, any person (or robot) who knows how qi.do API works would be able to
 
 However, if you protect your app with API keys, nobody would be able to execute your app's microservices except for those you give an API key.
 That is very useful if third parties need access to your app.
-You can add API keys in your app security settings.
 
+You can add API keys in your app security settings.
 The API key must be passed while initializing the app in your code:
 
 ```typescript
@@ -28,6 +28,7 @@ If you are sending raw HTTP requests, the API key has to be sent in the query pa
 
 ```shell
 curl https://qi.do/r/test/prod \
+-H 'Authorization: Bearer token' \
 -H 'k: mY4p1k3y'
 ```
 

@@ -85,7 +85,7 @@ curl https://qi.do/c/test/order \
 ```
 
 <br/>
-The JSON-encoded response contains the `id` of the newly created object.
+The JSON-encoded response contains the id of the newly created object.
 
 ### URL parameters
 
@@ -224,7 +224,7 @@ o | The query options object. | false
 
 `GET /r/<app>/<array>/<id>`
 
-A single object can be retrieved by attaching its `id` to the request URL.
+A single object can be retrieved by attaching its id to the request URL.
 
 > <a href="https://qi.do/r/test/order/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/test/order/5fcbde89c5ef0493e50a2fc3 </a>
 

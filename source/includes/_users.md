@@ -82,7 +82,7 @@ curl https://qi.do/c/test/u \
 ```
 
 <br/>
-The JSON-encoded response contains the `id` of the newly created user.
+The JSON-encoded response contains the id of the newly created user.
 A custom user id can be set directly in the request body as `_id`.
 The `p` property is encrypted and never shown in the results.
 
@@ -303,7 +303,7 @@ o | The query options object. | false
 
 `GET /r/<app>/u/<id>`
 
-A single user can be retrieved by attaching its `id` to the request URL.
+A single user can be retrieved by attaching its id to the request URL.
 
 > <a href="https://qi.do/r/test/u/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/test/u/5fcbde89c5ef0493e50a2fc3 </a>
 
@@ -449,7 +449,7 @@ A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 `GET /d/<app>/u/<id>`
 
-Using both methods, it is just necessary to append the user `id` in the URL.
+Using both methods, it is just necessary to append the user id in the URL.
 
 > <a href="https://qi.do/d/test/u/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/test/u/5fcbdeb1c5ef0493e50a2fc4 </a>
 

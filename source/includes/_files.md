@@ -1,8 +1,6 @@
 # Files
 
 It is possible to upload files within an object onto any array.
-The uploaded files are referenced in the newly created object.
-Also, for every file in a request, an object is created in the `f` array of the requested app.
 
 > An arbitrary object before file upload:
 
@@ -15,6 +13,9 @@ Also, for every file in a request, an object is created in the `f` array of the 
   "path": "custom/path" // the upload path
 }
 ```
+
+<br/>
+The uploaded files are referenced in the newly created object.
 
 > The main object after file upload:
 
@@ -40,6 +41,9 @@ Also, for every file in a request, an object is created in the `f` array of the 
   ]
 }
 ```
+
+<br/>
+Also, for every file in a request, an object is created in the `f` array of the requested app.
 
 > The file objects created in the `f` array:
 
@@ -126,7 +130,7 @@ curl https://qi.do/c/test/message \
 ```
 
 <br/>
-The JSON-encoded response contains the `id` of the newly created object related to the uploaded files.
+The JSON-encoded response contains the id of the newly created object related to the uploaded files.
 
 ### URL parameters
 
@@ -259,7 +263,7 @@ o | The query options object. | false
 
 `GET /r/<app>/f/<id>`
 
-A single user can be retrieved by attaching its `id` to the request URL.
+A single user can be retrieved by attaching its id to the request URL.
 
 > <a href="https://qi.do/r/test/f/5fcbde89c5ef0493e50a2fc3" target="_blank">qi.do/r/test/f/5fcbde89c5ef0493e50a2fc3 </a>
 
@@ -326,7 +330,7 @@ A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 `GET /d/<app>/f/<id>`
 
-Using both methods, it is just necessary to append the file `id` in the URL.
+Using both methods, it is just necessary to append the file id in the URL.
 
 > <a href="https://qi.do/d/test/f/5fcbdeb1c5ef0493e50a2fc4" target="_blank">qi.do/d/test/f/5fcbdeb1c5ef0493e50a2fc4 </a>
 
