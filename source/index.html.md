@@ -36,7 +36,7 @@ That means it is possible to migrate any existing MongoDB database to qi.do.
 
 ## Concepts
 
-In order to abstract database terminology to programming languages, we like to call databases **apps**, collections **arrays**, and documents **objects**.
+In order to abstract terminology, we like to call databases **apps**, collections **arrays**, and documents **objects**.
 
 The four main concepts on qi.do are:
 
