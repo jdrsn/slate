@@ -75,9 +75,9 @@ A request can be sent through the HTTP methods `POST` and `PUT` (with microservi
 
 ### HTTP endpoints
 
-`POST /c/<app>/<array>`
+`POST /c/:app/:array`
 
-`PUT /u/<app>/<array>`
+`PUT /u/:app/:array`
 
 All files in the same request are uploaded to the `path` specified in the request body.
 If a request does not contain `path`, then all files are uploaded to a new automatically created user directory.
@@ -150,11 +150,11 @@ id | The id of the object to be created. | false
 
 ## Read files
 
-The microservice `/r/<app>/f` allows you to read files that are stored on an app.
+The microservice `/r/:app/f` allows you to read files that are stored on an app.
 
 ### Read all files
 
-`GET /r/<app>/f`
+`GET /r/:app/f`
 
 Through the URLs ending with `/f`, all files on the requested app are retrieved.
 
@@ -189,7 +189,7 @@ curl https://qi.do/r/test/f \
 
 ### Read specific files
 
-`GET /r/<app>/f?x=<JSON>&o=<JSON>`
+`GET /r/:app/f?x=<JSON>&o=<JSON>`
 
 In order to retrieve specific files, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
@@ -261,7 +261,7 @@ o | The query options object. | false
 
 ### Read a single file
 
-`GET /r/<app>/f/<id>`
+`GET /r/:app/f/:id`
 
 A single user can be retrieved by attaching its id to the request URL.
 
@@ -321,14 +321,14 @@ id | The id of the file to be retrieved. | false
 
 ## Delete a file
 
-The microservice `/d/<app>/f` allows you to delete a file from an app.
+The microservice `/d/:app/f` allows you to delete a file from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`DELETE /d/<app>/f/<id>`
+`DELETE /d/:app/f/:id`
 
-`GET /d/<app>/f/<id>`
+`GET /d/:app/f/:id`
 
 Using both methods, it is just necessary to append the file id in the URL.
 

@@ -20,20 +20,20 @@ You are free to add any data to a `u` object.
 
 ## Create a user
 
-The microservice `/c/<app>/u` allows you to create a user in the requested app.
+The microservice `/c/:app/u` allows you to create a user in the requested app.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`POST /c/<app>/u`
+`POST /c/:app/u`
 
 Using `POST`, the data of the user to be created corresponds to the request body.
 
-`GET /c/<app>/u/<user>/<pass>`
+`GET /c/:app/u/:user/:pass`
 
 Via `GET`, username (or e-mail) and password can be passed directly as URL params.
 
-`GET /c/<app>/u?x=<JSON>`
+`GET /c/:app/u?x=<JSON>`
 
 For `GET` requests, the user data can also be passed as JSON string in the query param `x` of the URL.
 
@@ -117,13 +117,13 @@ A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`POST /a/<app>`
+`POST /a/:app`
 
 Using `POST`, user/email and password of the user to be authenticated corresponds to the request body.
 
-`GET /a/<app>/<user>/<pass>`
+`GET /a/:app/:user/:pass`
 
-`GET /a/<app>/<user>/<pass>/<expires>`
+`GET /a/:app/:user/:pass/:expires`
 
 Via `GET`, the login data should be in the URL parameters.
 
@@ -194,11 +194,11 @@ expires | The time period until which the token should be valid, in the form `30
 
 ## Read users
 
-The microservice `/r/<app>/u` allows you to read users that are registered on an app.
+The microservice `/r/:app/u` allows you to read users that are registered on an app.
 
 ### Read all users
 
-`GET /r/<app>/u`
+`GET /r/:app/u`
 
 Through the URLs ending with `/u`, all users on the requested app are retrieved.
 
@@ -233,7 +233,7 @@ curl https://qi.do/r/test/u \
 
 ### Read specific users
 
-`GET /r/<app>/u?x=<JSON>&o=<JSON>`
+`GET /r/:app/u?x=<JSON>&o=<JSON>`
 
 In order to retrieve specific users, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
@@ -301,7 +301,7 @@ o | The query options object. | false
 
 ### Read a single user
 
-`GET /r/<app>/u/<id>`
+`GET /r/:app/u/:id`
 
 A single user can be retrieved by attaching its id to the request URL.
 
@@ -357,16 +357,16 @@ id | The id of the user to be retrieved. | false
 
 ## Update a user
 
-The microservice `/u/<app>/u` allows you to update a user on an app.
+The microservice `/u/:app/u` allows you to update a user on an app.
 A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`PUT /u/<app>/u/<id>`
+`PUT /u/:app/u/:id`
 
 Using `PUT`, the data of the user to be updated corresponds to the request body.
 
-`GET /u/<app>/u/<id>?x=<JSON>`
+`GET /u/:app/u/:id?x=<JSON>`
 
 Via `GET`, the data needs to be passed as JSON string in the query param `x` of the URL.
 
@@ -440,14 +440,14 @@ x | The properties to updated/added. | true
 
 ## Delete a user
 
-The microservice `/d/<app>/u` allows you to delete a user from an app.
+The microservice `/d/:app/u` allows you to delete a user from an app.
 A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`DELETE /d/<app>/u/<id>`
+`DELETE /d/:app/u/:id`
 
-`GET /d/<app>/u/<id>`
+`GET /d/:app/u/:id`
 
 Using both methods, it is just necessary to append the user id in the URL.
 

@@ -29,7 +29,7 @@ qi.do is a set of microservices that process the most common backend functions i
 That includes real-time database, user authentication, file storage, push notifications, mail delivery,
 usage tracking and more.
 
-qi.do relies on a NoSQL, <a href="https://www.mongodb.com/document-databases" target="_blank">document-oriented</a>
+Our system relies on a NoSQL, <a href="https://www.mongodb.com/document-databases" target="_blank">document-oriented</a>
 database solution which is represented by a set of arrays that store JSON objects.
 The database infrastructure runs on distributed instances of <a href="https://www.mongodb.com/" target="_blank">MongoDB</a>.
 That means it is possible to migrate any existing MongoDB database to qi.do.
@@ -133,7 +133,7 @@ Our API has resource-oriented endpoints and uses standard HTTP authentication an
 > Base URL: https://qi.do
 
 The API can be used in any programming language via HTTP.
-If you are working with TypeScript or JavaScript, you can use the API through the node package `@qido/client`.
+If you are working with TypeScript or JavaScript, you can use the API through the node package `qi.do`.
 
 You can use qi.do API directly in your frontend or integrate in your existing backend.
 
@@ -166,7 +166,7 @@ The four main microservices are:
 
 Almost all HTTP endpoints for CRUD microservices follow the format:
 
-`/<microservice>/<app>/<array>/<data>`
+`/:microservice/:app/:array/:data`
 
 For create `/c` and update `/u` microservices, you can whether pass a JSON object in the HTTP request body, or a JSON
 string as the URL query param `x`.
@@ -197,7 +197,7 @@ Some advanced endpoints are:
 
 Most advanced HTTP endpoints follow the format:
 
-`/<microservice>/<app>/<function>/<data>`
+`/:microservice/:app/:function/:data`
 
 # Quickstart
 
@@ -208,22 +208,22 @@ You can also try qi.do out by clicking on the links that are shown on top of the
 
 You can install qi.do's client via npm:
 
-`npm i @qido/client`
+`npm i qi.do`
 
 ```shell
-npm i @qido/client
+npm i qi.do
 ```
 
 The client can be imported in TypeScript or JavaScript code.
 
 ```typescript
 // import qido client
-import * as qido from '@qido/client'
+import * as qido from 'qi.do'
 ```
 
 ```javascript
 // import qido client
-const qido = require('@qido/client')
+const qido = require('qi.do')
 ```
 
 <br/>
@@ -258,7 +258,7 @@ const app = new qido('test', 'mY4p1k3y')
 
 If your app has user authentication activated, then you have to create and authenticate a user before executing microservices.
 
-A user can be created through the HTTP endpoint `/c/<app>/u` or via `create` method from the node package.
+A user can be created through the HTTP endpoint `/c/:app/u` or via `create` method from the node package.
 
 > <a href='https://qi.do/c/test/u/me@example.com/p455w0rd' target='_blank'>qi.do/c/test/u/me@example.com/p455w0rd </a>
 
@@ -302,7 +302,7 @@ If your app has authentication on, every request must be authorized through a `t
 Everytime a user logs in, its `token` is generated.
 
 The method `auth` allows you to authenticate users.
-This method corresponds to the HTTP endpoint `/a/<app>`. 
+This method corresponds to the HTTP endpoint `/a/:app`. 
 
 > <a href='https://qi.do/a/test/me@example.com/p455w0rd' target='_blank'>qi.do/a/test/me@example.com/p455w0rd </a>
 
@@ -344,7 +344,7 @@ The same `create` method for users also allows you to create any kind of JSON ob
 The first parameter takes the name of the array.
 The second parameter takes the object to be created.
 
-Alternatively, you can use the HTTP endpoint `/c/<app>/<array>` to create an object.
+Alternatively, you can use the HTTP endpoint `/c/:app/:array` to create an object.
 
 > <a href='https://qi.do/c/test/prod?x={"name":"pasta","price":12.4,"on":true}' target='_blank'>qi.do/c/test/prod?x={"name":"pasta","price":12.4,"on":true} </a>
 
@@ -387,10 +387,10 @@ curl https://qi.do/c/test/prod \
 
 ### Read object
 
-The HTTP endpoint `/r/<app>/<array>` allows you to read objects that are stored in an array.
+The HTTP endpoint `/r/:app/:array` allows you to read objects that are stored in an array.
 In the node client library, the `read` method is used for that.
 
-Through the endpoints ending with `<array>`, all objects in this array are retrieved.
+Through the endpoints ending with `:array`, all objects in this array are retrieved.
 
 > <a href="https://qi.do/r/test/prod" target="_blank">qi.do/r/test/prod </a>
 

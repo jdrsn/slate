@@ -54,7 +54,7 @@ undefined | Other users can read/update/delete.
 
 
 
-# Streams (real-time)
+# Streams (realtime)
 
 With qi.do, you can handle multiple real-time databases even in the same application.
 For every array that you want to track changes, you must create a **stream** in the <a href="https://c.qi.do/streams" target="_blank">console</a>.
@@ -90,7 +90,7 @@ You can broadcast to any custom audience based on your subscriptions.
 
 ## Subscribe
 
-The microservice `/p/<app>/s` allows you to create a push subscription object on an app.
+The microservice `/p/:app/s` allows you to create a push subscription object on an app.
 This object can then be used to broadcast push notifications.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
@@ -119,11 +119,11 @@ More information about how to request permission for push notifications can be f
 
 ### HTTP endpoints
 
-`POST /p/<app>/s`
+`POST /p/:app/s`
 
 Using `POST`, the data of the subscription to be created corresponds to the HTTP request body.
 
-`GET /p/<app>/s?x=<JSON>`
+`GET /p/:app/s?x=<JSON>`
 
 Via `GET`, the subscription to be created needs to be passed as JSON string in the URL query param `x`.
 
@@ -137,7 +137,7 @@ const subscription = {
   channel: 'kids' // any custom audience
 }
 // subscribe to push notifications
-app.subscribe(subscription)
+app.subs(subscription)
   .then(res => console.log(res))
 ```
 
@@ -149,7 +149,7 @@ const subscription = {
   channel: 'kids' // any custom audience
 }
 // subscribe to push notifications
-app.subscribe(subscription)
+app.subs(subscription)
   .then(res => console.log(res))
 ```
 
@@ -184,7 +184,7 @@ x | The subscription to be created. | true
 
 ## Broadcast
 
-The microservice `/p/<app>/b` allows you to broadcast push notifications to a specific audience on an app.
+The microservice `/p/:app/b` allows you to broadcast push notifications to a specific audience on an app.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 > Example of a notification object:
@@ -203,15 +203,15 @@ You are able to broadcast push notifications to multiple users in a single reque
 
 ### HTTP endpoints
 
-`POST /p/<app>/b`
+`POST /p/:app/b`
 
-`POST /p/<app>/b?q=<JSON>`
+`POST /p/:app/b?q=<JSON>`
 
 Using `POST`, the data of the notification to be created corresponds to the HTTP request body.
 
-`GET /p/<app>/b?x=<JSON>`
+`GET /p/:app/b?x=<JSON>`
 
-`GET /p/<app>/b?x=<JSON>&q=<JSON>`
+`GET /p/:app/b?x=<JSON>&q=<JSON>`
 
 Via `GET`, the notification to be broadcasted needs to be passed as JSON string in the URL query param `x`.
 
@@ -312,7 +312,7 @@ The properties `to`, `sub` and `msg` are required, while `att` is optional.
 
 ## Send email messages
 
-The microservice `/m/<app>` allows you to send email messages via SMTP.
+The microservice `/m/:app` allows you to send email messages via SMTP.
 A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 We recommend creating SMTP configurations in the console.
@@ -320,17 +320,17 @@ However, you can also just pass a configuration as a parameter in the `mail` met
 
 ### HTTP endpoints
 
-`POST /m/<app>`
+`POST /m/:app`
 
-`POST /m/<app>/<id>`
+`POST /m/:app/:id`
 
-`POST /m/<app>?q=<JSON>`
+`POST /m/:app?q=<JSON>`
 
 Using `POST`, the data of the email message to be sent corresponds to the HTTP request body.
 
-`GET /m/<app>/<id>?x=<JSON>`
+`GET /m/:app/:id?x=<JSON>`
 
-`GET /m/<app>?x=<JSON>&q=<JSON>`
+`GET /m/:app?x=<JSON>&q=<JSON>`
 
 Via `GET`, the message to be sent needs to be passed as JSON string in the URL query param `x`.
 

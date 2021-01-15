@@ -25,15 +25,15 @@ A request can be sent through the HTTP methods `POST` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`POST /c/<app>/<array>`
+`POST /c/:app/:array`
 
-`POST /c/<app>/<array>/<id>`
+`POST /c/:app/:array/:id`
 
 Using `POST`, the data of the object to be created corresponds to the HTTP request body.
 
-`GET /c/<app>/<array>?x=<JSON>`
+`GET /c/:app/:array?x=<JSON>`
 
-`GET /c/<app>/<array>/<id>?x=<JSON>`
+`GET /c/:app/:array/:id?x=<JSON>`
 
 Via `GET`, the object to be created needs to be passed as JSON string in the URL query param `x`.
 
@@ -117,9 +117,9 @@ The microservice `/r` allows you to read objects (documents/entries) that are st
 
 ### Read all objects
 
-`GET /r/<app>/<array>`
+`GET /r/:app/:array`
 
-Through the endpoints ending with `<array>`, all objects in this array are retrieved.
+Through the endpoints ending with `:array`, all objects in this array are retrieved.
 
 > <a href="https://qi.do/r/test/order" target="_blank">qi.do/r/test/order </a>
 
@@ -152,7 +152,7 @@ curl https://qi.do/r/test/order \
 
 ### Read specific objects
 
-`GET /r/<app>/<array>?x=<JSON>&o=<JSON>`
+`GET /r/:app/:array?x=<JSON>&o=<JSON>`
 
 In order to retrieve specific objects, you have to set a filter to the query param `x` in the request URL.
 One can also **sort** and **paginate** queries by sending the options via query param `o`.
@@ -222,7 +222,7 @@ o | The query options object. | false
 
 ### Read a single object
 
-`GET /r/<app>/<array>/<id>`
+`GET /r/:app/:array/:id`
 
 A single object can be retrieved by attaching its id to the request URL.
 
@@ -283,11 +283,11 @@ A request can be sent through the HTTP methods `PUT` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`PUT /u/<app>/<array>/<id>`
+`PUT /u/:app/:array/:id`
 
 Using `PUT`, the object data to be updated corresponds to the request body.
 
-`GET /u/<app>/<array>/<id>?x=<JSON>`
+`GET /u/:app/:array/:id?x=<JSON>`
 
 Via `GET`, the data needs to be passed as JSON string in the query param `x` of the URL.
 
@@ -366,9 +366,9 @@ A request can be sent through the HTTP methods `DELETE` and `GET` (if enabled).
 
 ### HTTP endpoints
 
-`DELETE /d/<app>/<array>/<id>`
+`DELETE /d/:app/:array/:id`
 
-`GET /d/<app>/<array>/<id>`
+`GET /d/:app/:array/:id`
 
 Using both methods, it is just necessary to append the object id in the URL.
 
